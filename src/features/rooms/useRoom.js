@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
 import { cacheRoomData, getCachedRoomData } from '../offline/idbOutbox';
 
@@ -8,6 +8,8 @@ export function useRoom(user, profile) {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [inviteToken, setInviteToken] = useState('');
+
+  const currentRoomIdRef = useRef(null);
 
   const loadUserRoomsAndMembers = useCallback(async (preferredRoomId = null) => {
     if (!user) {
@@ -34,11 +36,10 @@ export function useRoom(user, profile) {
       setUserRooms(validRooms);
 
       let activeRoom = null;
+      const targetId = preferredRoomId || currentRoomIdRef.current;
 
-      if (preferredRoomId) {
-        activeRoom = validRooms.find(r => r.id === preferredRoomId) || validRooms[0];
-      } else if (currentRoom?.id) {
-        activeRoom = validRooms.find(r => r.id === currentRoom.id) || validRooms[0];
+      if (targetId) {
+        activeRoom = validRooms.find(r => r.id === targetId) || validRooms[0];
       } else if (validRooms.length > 0) {
         activeRoom = validRooms[0];
       } else {
@@ -68,6 +69,7 @@ export function useRoom(user, profile) {
         });
       }
 
+      currentRoomIdRef.current = activeRoom?.id || null;
       setCurrentRoom(activeRoom);
 
       // 2. Load members of the active room
@@ -87,15 +89,16 @@ export function useRoom(user, profile) {
       }
     } catch (err) {
       console.warn('Network load failed, reading from IndexedDB cache:', err);
-      if (currentRoom?.id) {
-        const cached = await getCachedRoomData(currentRoom.id);
+      const activeId = currentRoomIdRef.current;
+      if (activeId) {
+        const cached = await getCachedRoomData(activeId);
         if (cached?.room) setCurrentRoom(cached.room);
         if (cached?.members?.length) setMembers(cached.members);
       }
     } finally {
       setLoading(false);
     }
-  }, [user, profile, currentRoom?.id]);
+  }, [user, profile]);
 
   useEffect(() => {
     loadUserRoomsAndMembers();
@@ -123,6 +126,7 @@ export function useRoom(user, profile) {
 
   // Switch active room
   async function switchRoom(roomId) {
+    currentRoomIdRef.current = roomId;
     await loadUserRoomsAndMembers(roomId);
   }
 
@@ -155,8 +159,9 @@ export function useRoom(user, profile) {
 
     if (memErr) throw memErr;
 
-    setUserRooms(prev => [newRoom, ...prev]);
+    currentRoomIdRef.current = newRoom.id;
     setCurrentRoom(newRoom);
+    setUserRooms(prev => [newRoom, ...prev]);
     await loadUserRoomsAndMembers(newRoom.id);
     return newRoom;
   }
@@ -227,6 +232,7 @@ export function useRoom(user, profile) {
       throw error;
     }
 
+    currentRoomIdRef.current = targetRoomId;
     await loadUserRoomsAndMembers(targetRoomId);
     return data;
   }

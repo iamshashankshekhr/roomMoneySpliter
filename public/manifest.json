@@ -1,22 +1,62 @@
 {
-  "name": "RoomSplit",
+  "id": "/roomsplit-pwa",
+  "name": "RoomSplit — Roommate Expense Splitter",
   "short_name": "RoomSplit",
+  "description": "Mobile-first offline shared living expense ledger and debt simplification for roommates",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#f8f9ff",
-  "theme_color": "#f8f9ff",
+  "display_override": ["standalone", "window-controls-overlay", "minimal-ui"],
+  "background_color": "#F8FAFC",
+  "theme_color": "#4F46E5",
   "orientation": "portrait-primary",
-  "description": "Mobile-first shared living expense ledger and UPI settlements",
+  "categories": ["finance", "utilities", "lifestyle"],
   "icons": [
     {
       "src": "/pwa-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/pwa-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View Expenses",
+      "short_name": "Expenses",
+      "description": "Quick view of roommate expense ledger",
+      "url": "/?tab=expenses",
+      "icons": [{ "src": "/pwa-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View Balances",
+      "short_name": "Balances",
+      "description": "Check who owes whom and settlement transfers",
+      "url": "/?tab=settlements",
+      "icons": [{ "src": "/pwa-192.png", "sizes": "192x192" }]
     }
   ]
 }

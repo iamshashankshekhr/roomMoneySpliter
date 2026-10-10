@@ -19,6 +19,7 @@ import { AuthModal } from './features/auth/AuthModal';
 import { CreateRoomModal } from './features/rooms/CreateRoomModal';
 import { RoomSwitcherModal } from './features/rooms/RoomSwitcherModal';
 import { RoomSettingsModal } from './features/rooms/RoomSettingsModal';
+import { PwaInstallPrompt } from './components/common/PwaInstallPrompt';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -197,6 +198,9 @@ export default function App() {
           )}
         </div>
       </main>
+
+      {/* PWA Home Screen Installation Prompt */}
+      <PwaInstallPrompt />
 
       {/* 3. Bottom Navigation Bar */}
       <BottomNav

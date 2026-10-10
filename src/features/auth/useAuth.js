@@ -137,9 +137,31 @@ export function useAuth() {
       provider: 'google',
       options: {
         redirectTo: window.location.origin,
+        skipBrowserRedirect: true,
       },
     });
+
     if (error) throw error;
+
+    if (data?.url) {
+      try {
+        const check = await fetch(data.url, { method: 'GET', redirect: 'manual' });
+        if (check.status === 400) {
+          const body = await check.json().catch(() => ({}));
+          if (body?.msg?.includes('provider is not enabled') || body?.error_code === 'validation_failed') {
+            throw new Error(
+              'Google Sign-In is not enabled in your Supabase project yet. Please enable it in the Supabase Dashboard under Authentication → Providers → Google (with your Google Client ID & Secret).'
+            );
+          }
+        }
+      } catch (checkErr) {
+        if (checkErr.message?.includes('Google Sign-In is not enabled')) {
+          throw checkErr;
+        }
+      }
+
+      window.location.href = data.url;
+    }
     return data;
   }
 

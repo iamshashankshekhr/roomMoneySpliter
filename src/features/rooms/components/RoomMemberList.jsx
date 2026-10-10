@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, UserPlus, Shield, Plus, Building2, Check, ArrowRight, Link as LinkIcon, Sparkles } from 'lucide-react';
+import { Users, UserPlus, Shield, Plus, Building2, Check, ArrowRight, Link as LinkIcon, Sparkles, Settings } from 'lucide-react';
 
 export function RoomMemberList({
   members = [],
@@ -8,6 +8,7 @@ export function RoomMemberList({
   currentUserId,
   onOpenInvite,
   onOpenCreateRoom,
+  onOpenRoomSettings,
   onSwitchRoom,
   onJoinRoom,
 }) {
@@ -72,13 +73,24 @@ export function RoomMemberList({
             </p>
           </div>
 
-          <button
-            onClick={onOpenInvite}
-            className="h-9 px-3.5 bg-surface-container-low hover:bg-surface-container text-secondary rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 flex-shrink-0"
-          >
-            <UserPlus className="w-3.5 h-3.5" />
-            <span>Invite</span>
-          </button>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={onOpenRoomSettings}
+              className="h-9 px-3 bg-surface-container-low hover:bg-surface-container text-on-surface rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95"
+              title="Room Settings (Rename, Delete)"
+            >
+              <Settings className="w-3.5 h-3.5 text-outline" />
+              <span>Settings</span>
+            </button>
+
+            <button
+              onClick={onOpenInvite}
+              className="h-9 px-3.5 bg-secondary hover:bg-secondary-container text-on-secondary rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95"
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>Invite</span>
+            </button>
+          </div>
         </div>
       </div>
 

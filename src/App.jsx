@@ -18,6 +18,7 @@ import { InviteModal } from './features/rooms/InviteModal';
 import { AuthModal } from './features/auth/AuthModal';
 import { CreateRoomModal } from './features/rooms/CreateRoomModal';
 import { RoomSwitcherModal } from './features/rooms/RoomSwitcherModal';
+import { RoomSettingsModal } from './features/rooms/RoomSettingsModal';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -26,6 +27,7 @@ export default function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
   const [isRoomSwitcherOpen, setIsRoomSwitcherOpen] = useState(false);
+  const [isRoomSettingsOpen, setIsRoomSettingsOpen] = useState(false);
   const [inviteUrl, setInviteUrl] = useState('');
 
   // 1. Auth Hook
@@ -42,6 +44,8 @@ export default function App() {
     loading: roomLoading,
     createInviteLink,
     createNewRoom,
+    renameRoom,
+    deleteRoom,
     switchRoom,
     joinRoomByToken,
     refreshRoom,
@@ -112,6 +116,8 @@ export default function App() {
               onOpenAddExpense={() => setIsAddExpenseOpen(true)}
               onOpenInvite={handleOpenInvite}
               onOpenRoomSwitcher={() => setIsRoomSwitcherOpen(true)}
+              onOpenRoomSettings={() => setIsRoomSettingsOpen(true)}
+              onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
               onNavigateTab={setActiveTab}
               onDeleteExpense={deleteExpense}
             />
@@ -166,6 +172,7 @@ export default function App() {
               currentUserId={user?.id}
               onOpenInvite={handleOpenInvite}
               onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
+              onOpenRoomSettings={() => setIsRoomSettingsOpen(true)}
               onSwitchRoom={switchRoom}
               onJoinRoom={joinRoomByToken}
             />
@@ -217,6 +224,14 @@ export default function App() {
         onSwitchRoom={switchRoom}
         onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
         onJoinRoom={joinRoomByToken}
+      />
+
+      <RoomSettingsModal
+        isOpen={isRoomSettingsOpen}
+        onClose={() => setIsRoomSettingsOpen(false)}
+        room={currentRoom}
+        onRenameRoom={renameRoom}
+        onDeleteRoom={deleteRoom}
       />
     </div>
   );

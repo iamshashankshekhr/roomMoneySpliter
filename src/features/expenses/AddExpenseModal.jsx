@@ -21,8 +21,8 @@ const CATEGORIES = [
 ];
 
 export function AddExpenseModal({ isOpen, onClose, members = [], currentUserId, onSave }) {
-  const [amountRupees, setAmountRupees] = useState('1840.00');
-  const [title, setTitle] = useState('Groceries & Supplies');
+  const [amountRupees, setAmountRupees] = useState('');
+  const [title, setTitle] = useState('');
   const [category, setCategory] = useState('groceries');
   const [paidBy, setPaidBy] = useState('');
   const [selectedParticipants, setSelectedParticipants] = useState([]);

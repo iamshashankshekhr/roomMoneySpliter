@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, Link as LinkIcon, Building2, Plus } from 'lucide-react';
+import { ChevronDown, Link as LinkIcon, Building2, Settings } from 'lucide-react';
 
 export function RoomHeader({
   room,
@@ -7,6 +7,7 @@ export function RoomHeader({
   currentUserId,
   onOpenInvite,
   onOpenRoomSwitcher,
+  onOpenRoomSettings,
 }) {
   const roomName = room?.name || 'Flat 402';
   const address = room?.settings?.address || 'Bellandur, BLR';
@@ -48,7 +49,15 @@ export function RoomHeader({
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={onOpenRoomSettings}
+              className="w-9 h-9 bg-surface-container-low hover:bg-surface-container text-on-surface rounded-xl flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
+              title="Room Settings (Rename, Delete)"
+            >
+              <Settings className="w-4 h-4 text-outline hover:text-on-surface" />
+            </button>
+
             <button
               onClick={onOpenInvite}
               className="h-9 px-3 bg-surface-container-low hover:bg-surface-container text-secondary rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95 flex-shrink-0"

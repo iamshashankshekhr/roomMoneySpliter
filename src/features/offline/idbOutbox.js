@@ -128,7 +128,15 @@ export async function getPendingOutboxItems() {
 /**
  * Remove an item from the outbox after successful sync
  */
-export async function resolveOutboxItem(operationId) {
+/**
+ * Clear all cached data
+ */
+export async function clearAllCache() {
   const db = await getDb();
-  await db.delete('outbox', operationId);
+  const tx = db.transaction(['rooms', 'members', 'expenses', 'splits'], 'readwrite');
+  await tx.objectStore('rooms').clear();
+  await tx.objectStore('members').clear();
+  await tx.objectStore('expenses').clear();
+  await tx.objectStore('splits').clear();
+  await tx.done;
 }

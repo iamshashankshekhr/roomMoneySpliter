@@ -39,34 +39,13 @@ export function useRoom(user, profile) {
       const targetId = preferredRoomId || currentRoomIdRef.current;
 
       if (targetId) {
-        activeRoom = validRooms.find(r => r.id === targetId) || validRooms[0];
+        activeRoom = validRooms.find(r => r.id === targetId) || validRooms[0] || null;
       } else if (validRooms.length > 0) {
         activeRoom = validRooms[0];
       } else {
-        // First-time user without any room: automatically create a default starter room
-        const { data: newRoom, error: roomErr } = await supabase
-          .from('rooms')
-          .insert({
-            name: 'Flat 402 — Green Glen',
-            currency: 'INR',
-            created_by: user.id,
-            settings: { address: 'Bellandur, BLR' },
-          })
-          .select()
-          .single();
-
-        if (roomErr) throw roomErr;
-        activeRoom = newRoom;
-        setUserRooms([newRoom]);
-
-        // Add user as admin member
-        await supabase.from('room_members').insert({
-          room_id: newRoom.id,
-          user_id: user.id,
-          role: 'admin',
-          display_name: profile?.display_name || user.email?.split('@')[0] || 'Room Admin',
-          upi_id: profile?.upi_id || '',
-        });
+        // User has not created or joined any room yet: do NOT insert fake rooms
+        activeRoom = null;
+        setMembers([]);
       }
 
       currentRoomIdRef.current = activeRoom?.id || null;
@@ -166,6 +145,50 @@ export function useRoom(user, profile) {
     return newRoom;
   }
 
+  // Rename room & update settings
+  async function renameRoom(roomId, newName, newAddress = '') {
+    if (!user) throw new Error('You must be signed in to rename a room.');
+    if (!newName.trim()) throw new Error('Room name cannot be empty.');
+
+    const { data, error } = await supabase
+      .from('rooms')
+      .update({
+        name: newName.trim(),
+        settings: { address: newAddress.trim() },
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', roomId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    setUserRooms(prev => prev.map(r => (r.id === roomId ? data : r)));
+    if (currentRoom?.id === roomId) {
+      setCurrentRoom(data);
+    }
+    return data;
+  }
+
+  // Delete room permanently
+  async function deleteRoom(roomId) {
+    if (!user) throw new Error('You must be signed in to delete a room.');
+
+    const { error } = await supabase
+      .from('rooms')
+      .delete()
+      .eq('id', roomId);
+
+    if (error) throw error;
+
+    const remainingRooms = userRooms.filter(r => r.id !== roomId);
+    setUserRooms(remainingRooms);
+
+    const nextRoomId = remainingRooms[0]?.id || null;
+    currentRoomIdRef.current = nextRoomId;
+    await loadUserRoomsAndMembers(nextRoomId);
+  }
+
   // Generate or retrieve room invitation link
   async function createInviteLink() {
     if (!currentRoom?.id || !user) return '';
@@ -245,6 +268,8 @@ export function useRoom(user, profile) {
     inviteToken,
     switchRoom,
     createNewRoom,
+    renameRoom,
+    deleteRoom,
     createInviteLink,
     joinRoomByToken,
     refreshRoom: loadUserRoomsAndMembers,

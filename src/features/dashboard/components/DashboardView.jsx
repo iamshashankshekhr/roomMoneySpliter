@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, ArrowRightLeft, UserPlus } from 'lucide-react';
+import { Plus, ArrowRightLeft, UserPlus, Building2 } from 'lucide-react';
 import { RoomHeader } from '../../rooms/RoomHeader';
 import { BalanceHeroCard } from './BalanceHeroCard';
 import { RecentActivityList } from './RecentActivityList';
@@ -14,10 +14,44 @@ export function DashboardView({
   onOpenAddExpense,
   onOpenInvite,
   onOpenRoomSwitcher,
+  onOpenRoomSettings,
+  onOpenCreateRoom,
   onNavigateTab,
   onDeleteExpense,
 }) {
-  // Calculate my balance breakdown
+  // Empty state when user has not created or joined any room yet
+  if (!room) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center bg-surface-container-lowest rounded-3xl border border-surface-container my-6 shadow-sm">
+        <div className="w-16 h-16 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center mb-4">
+          <Building2 className="w-8 h-8" />
+        </div>
+        <h2 className="text-lg font-bold font-headline text-on-surface">No Room Found</h2>
+        <p className="text-xs text-on-surface-variant max-w-sm mt-1.5 mb-6 leading-relaxed">
+          You haven't created or joined a shared room yet. Create a room for your flat or hostel, or join one using an invitation code.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-2.5 w-full max-w-xs">
+          <button
+            onClick={onOpenCreateRoom}
+            className="flex-1 h-12 bg-secondary hover:bg-secondary-container text-on-secondary font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95"
+          >
+            <Plus className="w-4 h-4 stroke-[3]" />
+            <span>Create a Room</span>
+          </button>
+
+          <button
+            onClick={onOpenRoomSwitcher}
+            className="flex-1 h-12 bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all"
+          >
+            <span>Join with Code</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Calculate real balances from user's recorded expenses
   const { ledger } = calculateNetBalances(members, expenses, splits);
   const myMember = members.find(m => m.user_id === currentUserId);
   const myLedger = myMember ? ledger[myMember.id] : null;
@@ -38,6 +72,7 @@ export function DashboardView({
         currentUserId={currentUserId}
         onOpenInvite={onOpenInvite}
         onOpenRoomSwitcher={onOpenRoomSwitcher}
+        onOpenRoomSettings={onOpenRoomSettings}
       />
 
       {/* 2. Balance Hero Card */}

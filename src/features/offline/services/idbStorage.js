@@ -55,3 +55,13 @@ export async function getExpensesByRoom(roomId) {
   const index = db.transaction('expenses').store.index('room_id');
   return await index.getAll(roomId);
 }
+
+export async function clearAllLocalCache() {
+  const db = await initStorage();
+  const tx = db.transaction(['rooms', 'members', 'expenses', 'splits'], 'readwrite');
+  await tx.objectStore('rooms').clear();
+  await tx.objectStore('members').clear();
+  await tx.objectStore('expenses').clear();
+  await tx.objectStore('splits').clear();
+  await tx.done;
+}

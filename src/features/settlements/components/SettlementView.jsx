@@ -10,15 +10,24 @@ export function SettlementView({
   members = [],
   expenses = [],
   splits = [],
+  ledger: propLedger,
+  settlementPlan: propPlan,
+  payments: propPayments,
+  updatePaymentStatus: propUpdateStatus,
   currentUserId,
   onRefreshRoom,
 }) {
-  const { ledger, settlementPlan, payments, updatePaymentStatus } = useSettlements(
-    roomId,
+  const localSettlements = useSettlements(
+    propLedger ? null : roomId,
     members,
     expenses,
     splits
   );
+
+  const ledger = propLedger || localSettlements.ledger;
+  const settlementPlan = propPlan || localSettlements.settlementPlan;
+  const payments = propPayments || localSettlements.payments;
+  const updatePaymentStatus = propUpdateStatus || localSettlements.updatePaymentStatus;
 
   const [selectedTransfer, setSelectedTransfer] = useState(null);
   const [isPayModalOpen, setIsPayModalOpen] = useState(false);

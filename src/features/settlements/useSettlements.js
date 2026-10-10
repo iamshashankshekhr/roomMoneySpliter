@@ -49,6 +49,26 @@ export function useSettlements(roomId, members = [], expenses = [], splits = [])
     loadPayments();
   }, [loadPayments]);
 
+  // Realtime subscription for settlement payments
+  useEffect(() => {
+    if (!roomId) return;
+
+    const channel = supabase
+      .channel(`room_settlements_${roomId}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'settlement_payments' },
+        () => {
+          loadPayments();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [roomId, loadPayments]);
+
   // Compute live balances and settlement plan
   const ledger = useMemo(() => {
     return calculateNetBalances(members, expenses, splits, payments);

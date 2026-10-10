@@ -3,13 +3,15 @@ import { Plus, ArrowRightLeft, UserPlus, Building2 } from 'lucide-react';
 import { RoomHeader } from '../../rooms/RoomHeader';
 import { BalanceHeroCard } from './BalanceHeroCard';
 import { RecentActivityList } from './RecentActivityList';
-import { calculateNetBalances } from '../../settlements/utils/debtMinimization';
+import { calculateNetBalances } from '../../settlements/settlementEngine';
 
 export function DashboardView({
   room,
   members = [],
   expenses = [],
   splits = [],
+  ledger: externalLedger,
+  payments = [],
   currentUserId,
   onOpenAddExpense,
   onOpenInvite,
@@ -51,14 +53,22 @@ export function DashboardView({
     );
   }
 
-  // Calculate real balances from user's recorded expenses
-  const { ledger } = calculateNetBalances(members, expenses, splits);
+  // Calculate live balances factoring in expenses, splits, and settlement payments
+  const ledger = externalLedger || calculateNetBalances(members, expenses, splits, payments);
   const myMember = members.find(m => m.user_id === currentUserId);
   const myLedger = myMember ? ledger[myMember.id] : null;
 
   const myNetPaise = myLedger?.netPaise || 0;
   const myPaidPaise = myLedger?.paidPaise || 0;
   const mySharePaise = myLedger?.sharePaise || 0;
+
+  // Check for in-flight pending payments
+  const hasPendingSent = payments.some(
+    p => p.from_member_id === myMember?.id && p.status === 'payer_marked_paid'
+  );
+  const hasPendingReceived = payments.some(
+    p => p.to_member_id === myMember?.id && p.status === 'payer_marked_paid'
+  );
 
   const myTxCount = expenses.filter(e => e.paid_by_member_id === myMember?.id).length;
   const roomTotalPaise = expenses.reduce((acc, curr) => acc + (Number(curr.amount_paise) || 0), 0);
@@ -82,6 +92,9 @@ export function DashboardView({
         mySharePaise={mySharePaise}
         roomTotalPaise={roomTotalPaise}
         myTxCount={myTxCount}
+        hasPendingSent={hasPendingSent}
+        hasPendingReceived={hasPendingReceived}
+        onNavigateSettlements={() => onNavigateTab('settlements')}
       />
 
       {/* 3. Quick Action Buttons */}

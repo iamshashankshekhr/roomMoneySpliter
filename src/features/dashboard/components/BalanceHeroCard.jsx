@@ -1,9 +1,18 @@
 import React from 'react';
-import { ArrowUpCircle, ArrowDownCircle, Calendar, Sparkles } from 'lucide-react';
+import { ArrowUpCircle, ArrowDownCircle, Calendar, Sparkles, Clock } from 'lucide-react';
 import { formatINR, formatCompactINR } from '../../../lib/currencyFormatters';
 import { getCurrentMonthName } from '../../../lib/dateUtils';
 
-export function BalanceHeroCard({ myNetPaise, myPaidPaise, mySharePaise, roomTotalPaise, myTxCount }) {
+export function BalanceHeroCard({
+  myNetPaise,
+  myPaidPaise,
+  mySharePaise,
+  roomTotalPaise,
+  myTxCount,
+  hasPendingSent = false,
+  hasPendingReceived = false,
+  onNavigateSettlements,
+}) {
   const isPositive = myNetPaise > 0;
   const isZero = myNetPaise === 0;
 
@@ -18,6 +27,8 @@ export function BalanceHeroCard({ myNetPaise, myPaidPaise, mySharePaise, roomTot
           <span className="text-[11px] uppercase tracking-wider font-semibold text-inverse-primary flex items-center gap-1.5">
             {isPositive ? (
               <ArrowUpCircle className="w-4 h-4 text-teal-300" />
+            ) : isZero ? (
+              <Sparkles className="w-4 h-4 text-teal-300" />
             ) : (
               <ArrowDownCircle className="w-4 h-4 text-rose-300" />
             )}
@@ -52,13 +63,35 @@ export function BalanceHeroCard({ myNetPaise, myPaidPaise, mySharePaise, roomTot
           </span>
         </div>
 
-        <p className="text-xs text-inverse-primary/80 mb-4">
+        <p className="text-xs text-inverse-primary/80 mb-3">
           {isPositive
             ? 'Roommates owe you more than your pending shared expenses.'
             : isZero
             ? 'Your paid expenses match your fair shares perfectly.'
             : 'You have pending shares to clear with your roommates.'}
         </p>
+
+        {/* Pending In-Flight Payment Notifications */}
+        {hasPendingReceived && (
+          <button
+            type="button"
+            onClick={onNavigateSettlements}
+            className="mb-3 p-2.5 rounded-xl bg-teal-400/25 border border-teal-300/40 text-teal-100 text-xs font-semibold flex items-center justify-between w-full hover:bg-teal-400/35 transition-colors text-left active:scale-95"
+          >
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-teal-300 flex-shrink-0" />
+              <span>Roommate marked payment sent • Tap to confirm</span>
+            </span>
+            <span className="text-[11px] underline font-bold text-white">Review</span>
+          </button>
+        )}
+
+        {hasPendingSent && (
+          <div className="mb-3 p-2.5 rounded-xl bg-amber-400/20 border border-amber-300/30 text-amber-200 text-xs font-medium flex items-center gap-1.5">
+            <Clock className="w-4 h-4 text-amber-300 flex-shrink-0" />
+            <span>Payment marked sent • Awaiting roommate's receipt confirmation</span>
+          </div>
+        )}
 
         {/* Breakdown Split Metrics (You paid out vs Your fair share) */}
         <div className="grid grid-cols-2 gap-2 pt-1 border-none">

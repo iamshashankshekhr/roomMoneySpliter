@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from './features/auth/useAuth';
 import { useRoom } from './features/rooms/useRoom';
 import { useExpenses } from './features/expenses/useExpenses';
+import { useSettlements } from './features/settlements/useSettlements';
 import { useOnlineStatus } from './features/offline/hooks/useOnlineStatus';
 
 import { AppHeader } from './components/layout/AppHeader';
@@ -79,6 +80,15 @@ export default function App() {
     deleteExpense,
   } = useExpenses(currentRoom?.id, members, isOnline);
 
+  // 5. Settlements & Live Balances Hook
+  const {
+    ledger,
+    settlementPlan,
+    payments,
+    updatePaymentStatus,
+    refreshPayments,
+  } = useSettlements(currentRoom?.id, members, expenses, splits);
+
   // Check for invite token in URL (?join=XYZ)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -131,6 +141,8 @@ export default function App() {
               members={members}
               expenses={expenses}
               splits={splits}
+              ledger={ledger}
+              payments={payments}
               currentUserId={user?.id}
               onOpenAddExpense={() => setIsAddExpenseOpen(true)}
               onOpenInvite={handleOpenInvite}
@@ -179,8 +191,15 @@ export default function App() {
                 members={members}
                 expenses={expenses}
                 splits={splits}
+                ledger={ledger}
+                settlementPlan={settlementPlan}
+                payments={payments}
+                updatePaymentStatus={updatePaymentStatus}
                 currentUserId={user?.id}
-                onRefreshRoom={refreshRoom}
+                onRefreshRoom={() => {
+                  refreshRoom();
+                  refreshPayments();
+                }}
               />
             </div>
           )}

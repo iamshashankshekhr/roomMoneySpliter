@@ -2,7 +2,7 @@
  * Debt Minimization & Balance Ledger Engine (FR-BAL-01 to FR-BAL-07)
  */
 
-export function calculateNetBalances(members = [], expenses = [], splits = []) {
+export function calculateNetBalances(members = [], expenses = [], splits = [], confirmedPayments = []) {
   const ledger = {};
 
   // Initialize every member
@@ -26,6 +26,19 @@ export function calculateNetBalances(members = [], expenses = [], splits = []) {
   splits.forEach(split => {
     if (ledger[split.member_id]) {
       ledger[split.member_id].sharePaise += Number(split.amount_paise) || 0;
+    }
+  });
+
+  // Offset with any already completed settlement repayments
+  confirmedPayments.forEach(payment => {
+    if (payment.status === 'recipient_confirmed') {
+      const amt = Number(payment.amount_paise) || 0;
+      if (ledger[payment.from_member_id]) {
+        ledger[payment.from_member_id].paidPaise += amt;
+      }
+      if (ledger[payment.to_member_id]) {
+        ledger[payment.to_member_id].sharePaise += amt;
+      }
     }
   });
 

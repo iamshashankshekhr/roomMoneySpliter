@@ -226,7 +226,6 @@ export default function App() {
         onClose={() => setIsAuthOpen(false)}
         onSignInWithPassword={signInWithPassword}
         onSignUpWithPassword={signUpWithPassword}
-        onSignInWithGoogle={signInWithGoogle}
         onSignInWithOtp={signInWithOtp}
         onVerifyOtp={verifyOtp}
       />

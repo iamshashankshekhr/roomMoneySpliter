@@ -85,11 +85,11 @@ export default function App() {
     if (joinCode && user) {
       joinRoomByToken(joinCode)
         .then(() => {
-          // Clean URL without reload
           window.history.replaceState({}, document.title, window.location.pathname);
         })
         .catch(err => {
           console.warn('Failed to auto-join room:', err);
+          window.history.replaceState({}, document.title, window.location.pathname);
         });
     }
   }, [user, joinRoomByToken]);

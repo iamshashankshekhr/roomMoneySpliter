@@ -270,32 +270,53 @@ export function useRoom(user, profile) {
   // Join a room by token or ID
   async function joinRoomByToken(token, userDisplayName = '', userUpiId = '') {
     if (!user) throw new Error('You must be signed in to join a room.');
+    if (!token || !token.trim()) throw new Error('Room token is required.');
 
-    let targetRoomId = token;
+    const cleanToken = token.trim();
+    let targetRoomId = null;
 
-    // Check if token matches an invitation record
-    const { data: invite } = await supabase
+    // Check if input is already a valid room UUID
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cleanToken);
+
+    // 1. Look up token in room_invitations without foreign embedding
+    const { data: invite, error: inviteErr } = await supabase
       .from('room_invitations')
-      .select('*, rooms(*)')
-      .eq('token', token)
-      .single();
+      .select('room_id, usage_limit, usage_count, expires_at, revoked_at')
+      .eq('token', cleanToken)
+      .maybeSingle();
 
     if (invite?.room_id) {
+      if (invite.revoked_at) {
+        throw new Error('This invitation link has been revoked.');
+      }
+      if (invite.expires_at && new Date(invite.expires_at) < new Date()) {
+        throw new Error('This invitation link has expired.');
+      }
       targetRoomId = invite.room_id;
+    } else if (isUuid) {
+      targetRoomId = cleanToken;
+    } else {
+      throw new Error('Invalid or expired room invitation code.');
     }
 
-    const name = userDisplayName || profile?.display_name || user.email?.split('@')[0] || 'New Roommate';
+    if (!targetRoomId) {
+      throw new Error('Could not resolve room from invitation code.');
+    }
+
+    const name = userDisplayName || profile?.display_name || user.email?.split('@')[0] || 'Roommate';
     const upi = userUpiId || profile?.upi_id || '';
 
+    // 2. Add or activate member in room
     const { data, error } = await supabase
       .from('room_members')
-      .insert({
+      .upsert({
         room_id: targetRoomId,
         user_id: user.id,
         role: 'member',
         display_name: name,
         upi_id: upi,
-      })
+        status: 'active',
+      }, { onConflict: 'room_id,user_id' })
       .select()
       .single();
 
@@ -303,7 +324,18 @@ export function useRoom(user, profile) {
       throw error;
     }
 
+    // 3. Increment invite usage count
+    if (invite) {
+      await supabase
+        .from('room_invitations')
+        .update({ usage_count: (invite.usage_count || 0) + 1 })
+        .eq('token', cleanToken);
+    }
+
     currentRoomIdRef.current = targetRoomId;
+    if (user?.id) {
+      localStorage.setItem(`rs_active_room_${user.id}`, targetRoomId);
+    }
     await loadUserRoomsAndMembers(targetRoomId);
     return data;
   }

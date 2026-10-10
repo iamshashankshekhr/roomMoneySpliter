@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, ArrowRightLeft, UserPlus, Building2 } from 'lucide-react';
+import { Plus, ArrowRightLeft, UserPlus, Building2, Wallet } from 'lucide-react';
 import { RoomHeader } from '../../rooms/RoomHeader';
 import { BalanceHeroCard } from './BalanceHeroCard';
 import { RecentActivityList } from './RecentActivityList';
@@ -98,26 +98,34 @@ export function DashboardView({
       />
 
       {/* 3. Quick Action Buttons */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-4 gap-2">
         <button
           onClick={onOpenAddExpense}
-          className="h-12 bg-secondary hover:bg-secondary-container text-on-secondary rounded-2xl flex items-center justify-center gap-1.5 text-xs font-bold shadow-sm transition-all active:scale-95"
+          className="h-12 bg-secondary hover:bg-secondary-container text-on-secondary rounded-2xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold shadow-sm transition-all active:scale-95"
         >
           <Plus className="w-4 h-4" />
           <span>Add Bill</span>
         </button>
 
         <button
-          onClick={() => onNavigateTab('settlements')}
-          className="h-12 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-2xl flex items-center justify-center gap-1.5 text-xs font-bold transition-all active:scale-95"
+          onClick={() => onNavigateTab('personal')}
+          className="h-12 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-2xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition-all active:scale-95"
         >
-          <ArrowRightLeft className="w-4 h-4 text-secondary" />
+          <Wallet className="w-4 h-4 text-secondary" />
+          <span>Personal</span>
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('settlements')}
+          className="h-12 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-2xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition-all active:scale-95"
+        >
+          <ArrowRightLeft className="w-4 h-4 text-outline" />
           <span>Balances</span>
         </button>
 
         <button
           onClick={onOpenInvite}
-          className="h-12 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-2xl flex items-center justify-center gap-1.5 text-xs font-bold transition-all active:scale-95"
+          className="h-12 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-2xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition-all active:scale-95"
         >
           <UserPlus className="w-4 h-4 text-outline" />
           <span>Invite</span>

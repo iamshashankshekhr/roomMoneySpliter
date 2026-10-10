@@ -3,6 +3,7 @@ import { useAuth } from './features/auth/useAuth';
 import { useRoom } from './features/rooms/useRoom';
 import { useExpenses } from './features/expenses/useExpenses';
 import { useSettlements } from './features/settlements/useSettlements';
+import { usePersonalExpenses } from './features/personal/usePersonalExpenses';
 import { useOnlineStatus } from './features/offline/hooks/useOnlineStatus';
 
 import { AppHeader } from './components/layout/AppHeader';
@@ -11,10 +12,12 @@ import { SyncStatusBar } from './features/offline/components/SyncStatusBar';
 
 import { DashboardView } from './features/dashboard/components/DashboardView';
 import { ExpenseList } from './features/expenses/ExpenseList';
+import { PersonalExpensesView } from './features/personal/PersonalExpensesView';
 import { SettlementView } from './features/settlements/components/SettlementView';
 import { RoomMemberList } from './features/rooms/components/RoomMemberList';
 
 import { AddExpenseModal } from './features/expenses/AddExpenseModal';
+import { AddPersonalExpenseModal } from './features/personal/AddPersonalExpenseModal';
 import { InviteModal } from './features/rooms/InviteModal';
 import { AuthModal } from './features/auth/AuthModal';
 import { CreateRoomModal } from './features/rooms/CreateRoomModal';
@@ -25,6 +28,7 @@ import { PwaInstallPrompt } from './components/common/PwaInstallPrompt';
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
+  const [isAddPersonalOpen, setIsAddPersonalOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
@@ -88,6 +92,9 @@ export default function App() {
     updatePaymentStatus,
     refreshPayments,
   } = useSettlements(currentRoom?.id, members, expenses, splits);
+
+  // 6. Personal Expense Tracker Hook
+  const personalExpensesHook = usePersonalExpenses(user?.id);
 
   // Check for invite token in URL (?join=XYZ)
   useEffect(() => {
@@ -174,6 +181,25 @@ export default function App() {
             </div>
           )}
 
+          {activeTab === 'personal' && (
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-secondary">
+                    Private & Individual
+                  </span>
+                  <h1 className="text-lg font-bold font-headline text-on-surface">
+                    Personal Expense Tracker
+                  </h1>
+                </div>
+              </div>
+              <PersonalExpensesView
+                personalExpensesHook={personalExpensesHook}
+                onOpenAddModal={() => setIsAddPersonalOpen(true)}
+              />
+            </div>
+          )}
+
           {activeTab === 'settlements' && (
             <div>
               <div className="flex items-center justify-between mb-4">
@@ -228,7 +254,13 @@ export default function App() {
       <BottomNav
         activeTab={activeTab}
         onSelectTab={setActiveTab}
-        onOpenAdd={() => setIsAddExpenseOpen(true)}
+        onOpenAdd={() => {
+          if (activeTab === 'personal') {
+            setIsAddPersonalOpen(true);
+          } else {
+            setIsAddExpenseOpen(true);
+          }
+        }}
       />
 
       {/* 4. Modals */}
@@ -238,6 +270,12 @@ export default function App() {
         members={members}
         currentUserId={user?.id}
         onSave={addExpense}
+      />
+
+      <AddPersonalExpenseModal
+        isOpen={isAddPersonalOpen}
+        onClose={() => setIsAddPersonalOpen(false)}
+        onSave={personalExpensesHook.addPersonalExpense}
       />
 
       <InviteModal

@@ -1,7 +1,7 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'roomsplit_offline_db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export async function initStorage() {
   return openDB(DB_NAME, DB_VERSION, {
@@ -24,6 +24,13 @@ export async function initStorage() {
       if (!db.objectStoreNames.contains('outbox')) {
         const outboxStore = db.createObjectStore('outbox', { keyPath: 'operation_id' });
         outboxStore.createIndex('status', 'status');
+      }
+      if (!db.objectStoreNames.contains('personal_expenses')) {
+        const pExpStore = db.createObjectStore('personal_expenses', { keyPath: 'id' });
+        pExpStore.createIndex('user_id', 'user_id');
+      }
+      if (!db.objectStoreNames.contains('personal_budgets')) {
+        db.createObjectStore('personal_budgets', { keyPath: 'month_key' });
       }
     },
   });

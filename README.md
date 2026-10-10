@@ -44,6 +44,13 @@
 - Automatically recovers and loads user rooms and pending invites upon authentication.
 - Multi-room switcher with unique 6-character room codes and QR share links.
 
+### 📊 7. Personal Expense Tracker & Monthly Budgeting
+- **Private & Individual:** Track private personal spending completely separate from shared room expenses.
+- **Monthly Spending Totals:** Month-by-month navigation (e.g. Current Month vs Past Months) with total monthly spend.
+- **Category Breakdown:** Grouped by category (Food, Travel, Shopping, Bills, Entertainment, Groceries, Health, etc.) with visual percentage progress bars.
+- **Monthly Budget Targets:** Set a monthly spending budget (e.g. ₹20,000) and track remaining balance with over-budget alerts.
+- **Offline & Real-Time:** Works offline via IndexedDB and syncs in real time with Supabase.
+
 ---
 
 ## 🛠️ Tech Stack
@@ -176,6 +183,29 @@ create table public.settlement_payments (
   updated_at timestamptz default now()
 );
 
+-- 8. Personal Expenses Table
+create table public.personal_expenses (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null,
+  amount_paise bigint not null,
+  category text default 'other',
+  expense_date date default current_date not null,
+  note text,
+  created_at timestamptz default now()
+);
+
+-- 9. Personal Budgets Table
+create table public.personal_budgets (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  month_key text not null, -- e.g. '2026-10' or 'default'
+  budget_paise bigint not null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  unique (user_id, month_key)
+);
+
 -- Enable Row Level Security (RLS) on all tables and grant authenticated & anon policies as desired
 alter table public.rooms enable row level security;
 alter table public.room_members enable row level security;
@@ -184,6 +214,8 @@ alter table public.expense_splits enable row level security;
 alter table public.settlements enable row level security;
 alter table public.settlement_payments enable row level security;
 alter table public.room_invitations enable row level security;
+alter table public.personal_expenses enable row level security;
+alter table public.personal_budgets enable row level security;
 ```
 
 ---

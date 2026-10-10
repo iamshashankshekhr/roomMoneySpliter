@@ -1,13 +1,13 @@
 import React from 'react';
-import { Home, Receipt, Plus, ArrowRightLeft, Users } from 'lucide-react';
+import { Home, Receipt, Plus, ArrowRightLeft, Wallet } from 'lucide-react';
 
 export function BottomNav({ activeTab, onSelectTab, onOpenAdd }) {
   const tabs = [
     { id: 'dashboard', label: 'Home', icon: Home },
-    { id: 'expenses', label: 'Expenses', icon: Receipt },
+    { id: 'expenses', label: 'Room', icon: Receipt },
     { id: 'add', label: 'Add', isAction: true },
+    { id: 'personal', label: 'Personal', icon: Wallet },
     { id: 'settlements', label: 'Balances', icon: ArrowRightLeft },
-    { id: 'members', label: 'Room', icon: Users },
   ];
 
   return (

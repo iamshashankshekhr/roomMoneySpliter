@@ -22,3 +22,43 @@ export function formatRelativeTime(dateString) {
 export function getCurrentMonthName() {
   return new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric' }).format(new Date());
 }
+
+export function getCurrentYearMonth() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
+export function getMonthLabel(yearMonthStr) {
+  if (!yearMonthStr) return getCurrentMonthName();
+  const [year, month] = yearMonthStr.split('-').map(Number);
+  const date = new Date(year, month - 1, 1);
+  return new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric' }).format(date);
+}
+
+export function getPreviousMonth(yearMonthStr) {
+  const [year, month] = (yearMonthStr || getCurrentYearMonth()).split('-').map(Number);
+  const date = new Date(year, month - 2, 1);
+  const prevYear = date.getFullYear();
+  const prevMonth = String(date.getMonth() + 1).padStart(2, '0');
+  return `${prevYear}-${prevMonth}`;
+}
+
+export function getNextMonth(yearMonthStr) {
+  const [year, month] = (yearMonthStr || getCurrentYearMonth()).split('-').map(Number);
+  const date = new Date(year, month, 1);
+  const nextYear = date.getFullYear();
+  const nextMonth = String(date.getMonth() + 1).padStart(2, '0');
+  return `${nextYear}-${nextMonth}`;
+}
+
+export function formatDateDisplay(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
+}

@@ -7,7 +7,7 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Get initial session
+    // 1. Get initial active session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -17,11 +17,12 @@ export function useAuth() {
       }
     });
 
-    // 2. Listen for auth changes
+    // 2. Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      if (currentUser) {
+        fetchProfile(currentUser.id);
       } else {
         setProfile(null);
         setLoading(false);
@@ -51,29 +52,70 @@ export function useAuth() {
     }
   }
 
-  async function signInWithOtp(email, displayName = '', upiId = '') {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
+  // 1. Sign in with Email & Password
+  async function signInWithPassword(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    if (error) throw error;
+    setUser(data.user);
+    if (data.user) {
+      await fetchProfile(data.user.id);
+    }
+    return data;
+  }
+
+  // 2. Sign up with Email & Password
+  async function signUpWithPassword(email, password, displayName = '', upiId = '') {
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
       options: {
         data: {
-          display_name: displayName,
-          upi_id: upiId,
+          display_name: displayName.trim(),
+          upi_id: upiId.trim(),
+        },
+      },
+    });
+    if (error) throw error;
+    setUser(data.user);
+    if (data.user) {
+      await fetchProfile(data.user.id);
+    }
+    return data;
+  }
+
+  // 3. Sign in with OTP / Magic Link
+  async function signInWithOtp(email, displayName = '', upiId = '') {
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      options: {
+        data: {
+          display_name: displayName.trim(),
+          upi_id: upiId.trim(),
         },
       },
     });
     if (error) throw error;
   }
 
+  // 4. Verify OTP
   async function verifyOtp(email, token) {
     const { data, error } = await supabase.auth.verifyOtp({
-      email,
-      token,
+      email: email.trim(),
+      token: token.trim(),
       type: 'email',
     });
     if (error) throw error;
+    setUser(data.user);
+    if (data.user) {
+      await fetchProfile(data.user.id);
+    }
     return data;
   }
 
+  // 5. Update user profile
   async function updateProfile({ displayName, upiId }) {
     if (!user) return;
     const { error } = await supabase
@@ -89,14 +131,32 @@ export function useAuth() {
     setProfile(prev => ({ ...prev, display_name: displayName, upi_id: upiId }));
   }
 
+  // 6. Sign in with Google OAuth
+  async function signInWithGoogle() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+    if (error) throw error;
+    return data;
+  }
+
+  // 7. Sign out
   async function signOut() {
     await supabase.auth.signOut();
+    setUser(null);
+    setProfile(null);
   }
 
   return {
     user,
     profile,
     loading,
+    signInWithPassword,
+    signUpWithPassword,
+    signInWithGoogle,
     signInWithOtp,
     verifyOtp,
     updateProfile,

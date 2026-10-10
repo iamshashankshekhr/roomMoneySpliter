@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Building2, MapPin, Plus, Check } from 'lucide-react';
 
-export function CreateRoomModal({ isOpen, onClose, onCreateRoom }) {
+export function CreateRoomModal({ isOpen, onClose, onCreateRoom, user, onOpenAuth }) {
   const [roomName, setRoomName] = useState('');
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
@@ -11,6 +11,16 @@ export function CreateRoomModal({ isOpen, onClose, onCreateRoom }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!user) {
+      if (onOpenAuth) {
+        onClose();
+        onOpenAuth();
+      } else {
+        setError('Please sign in first to create a room.');
+      }
+      return;
+    }
+
     if (!roomName.trim()) {
       setError('Please provide a room or flat name.');
       return;
@@ -52,11 +62,32 @@ export function CreateRoomModal({ isOpen, onClose, onCreateRoom }) {
           </button>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 rounded-xl bg-error-container text-on-error-container text-xs font-medium">
-            {error}
+        {!user ? (
+          <div className="text-center py-4 space-y-4">
+            <div className="p-4 rounded-2xl bg-secondary/5 border border-secondary/20 text-left">
+              <p className="text-xs font-semibold text-secondary mb-1">Sign-in Required</p>
+              <p className="text-xs text-on-surface-variant leading-relaxed">
+                Sign in with your Gmail or account so all your rooms and roommate expenses are safely stored in your account.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                if (onOpenAuth) onOpenAuth();
+              }}
+              className="w-full h-11 bg-secondary hover:bg-secondary-container text-on-secondary font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
+            >
+              <span>Sign In to Continue</span>
+            </button>
           </div>
-        )}
+        ) : (
+          <>
+            {error && (
+              <div className="mb-4 p-3 rounded-xl bg-error-container text-on-error-container text-xs font-medium">
+                {error}
+              </div>
+            )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -107,6 +138,8 @@ export function CreateRoomModal({ isOpen, onClose, onCreateRoom }) {
             <Plus className="w-4 h-4" />
           </button>
         </form>
+        </>
+        )}
       </div>
     </div>
   );

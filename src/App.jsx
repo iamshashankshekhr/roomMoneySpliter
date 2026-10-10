@@ -31,7 +31,25 @@ export default function App() {
   const [inviteUrl, setInviteUrl] = useState('');
 
   // 1. Auth Hook
-  const { user, profile, loading: authLoading, signInWithOtp, verifyOtp, signOut } = useAuth();
+  const {
+    user,
+    profile,
+    loading: authLoading,
+    signInWithPassword,
+    signUpWithPassword,
+    signInWithGoogle,
+    signInWithOtp,
+    verifyOtp,
+    signOut,
+  } = useAuth();
+
+  function handleOpenCreateRoom() {
+    if (!user) {
+      setIsAuthOpen(true);
+      return;
+    }
+    setIsCreateRoomOpen(true);
+  }
 
   // 2. Network & Offline Hook
   const { isOnline, pendingCount, isSyncing, triggerSync } = useOnlineStatus();
@@ -117,7 +135,7 @@ export default function App() {
               onOpenInvite={handleOpenInvite}
               onOpenRoomSwitcher={() => setIsRoomSwitcherOpen(true)}
               onOpenRoomSettings={() => setIsRoomSettingsOpen(true)}
-              onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
+              onOpenCreateRoom={handleOpenCreateRoom}
               onNavigateTab={setActiveTab}
               onDeleteExpense={deleteExpense}
             />
@@ -171,7 +189,7 @@ export default function App() {
               currentRoom={currentRoom}
               currentUserId={user?.id}
               onOpenInvite={handleOpenInvite}
-              onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
+              onOpenCreateRoom={handleOpenCreateRoom}
               onOpenRoomSettings={() => setIsRoomSettingsOpen(true)}
               onSwitchRoom={switchRoom}
               onJoinRoom={joinRoomByToken}
@@ -206,14 +224,19 @@ export default function App() {
       <AuthModal
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
-        onSignIn={signInWithOtp}
-        onVerify={verifyOtp}
+        onSignInWithPassword={signInWithPassword}
+        onSignUpWithPassword={signUpWithPassword}
+        onSignInWithGoogle={signInWithGoogle}
+        onSignInWithOtp={signInWithOtp}
+        onVerifyOtp={verifyOtp}
       />
 
       <CreateRoomModal
         isOpen={isCreateRoomOpen}
         onClose={() => setIsCreateRoomOpen(false)}
         onCreateRoom={createNewRoom}
+        user={user}
+        onOpenAuth={() => setIsAuthOpen(true)}
       />
 
       <RoomSwitcherModal
@@ -222,7 +245,7 @@ export default function App() {
         rooms={userRooms}
         currentRoomId={currentRoom?.id}
         onSwitchRoom={switchRoom}
-        onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
+        onOpenCreateRoom={handleOpenCreateRoom}
         onJoinRoom={joinRoomByToken}
       />
 

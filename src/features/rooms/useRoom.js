@@ -13,6 +13,9 @@ export function useRoom(user, profile) {
 
   const loadUserRoomsAndMembers = useCallback(async (preferredRoomId = null) => {
     if (!user) {
+      setCurrentRoom(null);
+      setUserRooms([]);
+      setMembers([]);
       setLoading(false);
       return;
     }
@@ -23,27 +26,60 @@ export function useRoom(user, profile) {
       // 1. Fetch all room memberships for current user
       const { data: memberRows, error: memberErr } = await supabase
         .from('room_members')
-        .select('*, rooms(*)')
+        .select('room_id, role, status, rooms(*)')
         .eq('user_id', user.id)
         .eq('status', 'active');
 
-      if (memberErr) throw memberErr;
+      if (memberErr) console.warn('Member fetch warning:', memberErr);
 
-      const validRooms = (memberRows || [])
-        .map(row => row.rooms)
-        .filter(Boolean);
+      // 2. Also fetch all rooms created by this user directly (failsafe fallback)
+      const { data: createdRooms, error: createdErr } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('created_by', user.id);
 
+      if (createdErr) console.warn('Created rooms fetch warning:', createdErr);
+
+      const roomsFromMembers = (memberRows || []).map(row => row.rooms).filter(Boolean);
+      const roomsFromCreated = createdRooms || [];
+
+      // Combine both sources and deduplicate by room id
+      const roomMap = new Map();
+      [...roomsFromMembers, ...roomsFromCreated].forEach(r => {
+        if (r && r.id) roomMap.set(r.id, r);
+      });
+
+      const validRooms = Array.from(roomMap.values());
       setUserRooms(validRooms);
 
+      // Self-heal: ensure creator is recorded as active member in room_members
+      for (const cr of roomsFromCreated) {
+        const isMem = (memberRows || []).some(m => m.room_id === cr.id);
+        if (!isMem) {
+          try {
+            await supabase.from('room_members').upsert({
+              room_id: cr.id,
+              user_id: user.id,
+              role: 'admin',
+              display_name: profile?.display_name || user.email?.split('@')[0] || 'Room Admin',
+              status: 'active',
+            }, { onConflict: 'room_id,user_id' });
+          } catch (syncErr) {
+            console.warn('Auto-membership sync note:', syncErr);
+          }
+        }
+      }
+
       let activeRoom = null;
-      const targetId = preferredRoomId || currentRoomIdRef.current;
+      const savedRoomId = localStorage.getItem(`rs_active_room_${user.id}`);
+      const targetId = preferredRoomId || savedRoomId || currentRoomIdRef.current;
 
       if (targetId) {
         activeRoom = validRooms.find(r => r.id === targetId) || validRooms[0] || null;
       } else if (validRooms.length > 0) {
         activeRoom = validRooms[0];
       } else {
-        // User has not created or joined any room yet: do NOT insert fake rooms
+        // User has not created or joined any room yet
         activeRoom = null;
         setMembers([]);
       }
@@ -51,8 +87,10 @@ export function useRoom(user, profile) {
       currentRoomIdRef.current = activeRoom?.id || null;
       setCurrentRoom(activeRoom);
 
-      // 2. Load members of the active room
       if (activeRoom) {
+        localStorage.setItem(`rs_active_room_${user.id}`, activeRoom.id);
+
+        // 3. Load members of the active room
         const { data: allMembers, error: allMemErr } = await supabase
           .from('room_members')
           .select('*')
@@ -106,6 +144,9 @@ export function useRoom(user, profile) {
   // Switch active room
   async function switchRoom(roomId) {
     currentRoomIdRef.current = roomId;
+    if (user?.id) {
+      localStorage.setItem(`rs_active_room_${user.id}`, roomId);
+    }
     await loadUserRoomsAndMembers(roomId);
   }
 
@@ -128,19 +169,21 @@ export function useRoom(user, profile) {
     if (roomErr) throw roomErr;
 
     // Add creator as admin member
-    const { error: memErr } = await supabase.from('room_members').insert({
+    const { error: memErr } = await supabase.from('room_members').upsert({
       room_id: newRoom.id,
       user_id: user.id,
       role: 'admin',
       display_name: profile?.display_name || user.email?.split('@')[0] || 'Room Admin',
       upi_id: profile?.upi_id || '',
-    });
+      status: 'active',
+    }, { onConflict: 'room_id,user_id' });
 
-    if (memErr) throw memErr;
+    if (memErr) console.warn('Member upsert warning:', memErr);
 
     currentRoomIdRef.current = newRoom.id;
+    localStorage.setItem(`rs_active_room_${user.id}`, newRoom.id);
     setCurrentRoom(newRoom);
-    setUserRooms(prev => [newRoom, ...prev]);
+    setUserRooms(prev => [newRoom, ...prev.filter(r => r.id !== newRoom.id)]);
     await loadUserRoomsAndMembers(newRoom.id);
     return newRoom;
   }
@@ -186,6 +229,11 @@ export function useRoom(user, profile) {
 
     const nextRoomId = remainingRooms[0]?.id || null;
     currentRoomIdRef.current = nextRoomId;
+    if (nextRoomId && user?.id) {
+      localStorage.setItem(`rs_active_room_${user.id}`, nextRoomId);
+    } else if (user?.id) {
+      localStorage.removeItem(`rs_active_room_${user.id}`);
+    }
     await loadUserRoomsAndMembers(nextRoomId);
   }
 

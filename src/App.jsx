@@ -16,12 +16,16 @@ import { RoomMemberList } from './features/rooms/components/RoomMemberList';
 import { AddExpenseModal } from './features/expenses/AddExpenseModal';
 import { InviteModal } from './features/rooms/InviteModal';
 import { AuthModal } from './features/auth/AuthModal';
+import { CreateRoomModal } from './features/rooms/CreateRoomModal';
+import { RoomSwitcherModal } from './features/rooms/RoomSwitcherModal';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
+  const [isRoomSwitcherOpen, setIsRoomSwitcherOpen] = useState(false);
   const [inviteUrl, setInviteUrl] = useState('');
 
   // 1. Auth Hook
@@ -33,9 +37,12 @@ export default function App() {
   // 3. Room Hook
   const {
     currentRoom,
+    userRooms,
     members,
     loading: roomLoading,
     createInviteLink,
+    createNewRoom,
+    switchRoom,
     joinRoomByToken,
     refreshRoom,
   } = useRoom(user, profile);
@@ -103,6 +110,7 @@ export default function App() {
               currentUserId={user?.id}
               onOpenAddExpense={() => setIsAddExpenseOpen(true)}
               onOpenInvite={handleOpenInvite}
+              onOpenRoomSwitcher={() => setIsRoomSwitcherOpen(true)}
               onNavigateTab={setActiveTab}
               onDeleteExpense={deleteExpense}
             />
@@ -154,6 +162,8 @@ export default function App() {
               members={members}
               currentUserId={user?.id}
               onOpenInvite={handleOpenInvite}
+              onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
+              onOpenRoomSwitcher={() => setIsRoomSwitcherOpen(true)}
               room={currentRoom}
             />
           )}
@@ -188,6 +198,22 @@ export default function App() {
         onClose={() => setIsAuthOpen(false)}
         onSignIn={signInWithOtp}
         onVerify={verifyOtp}
+      />
+
+      <CreateRoomModal
+        isOpen={isCreateRoomOpen}
+        onClose={() => setIsCreateRoomOpen(false)}
+        onCreateRoom={createNewRoom}
+      />
+
+      <RoomSwitcherModal
+        isOpen={isRoomSwitcherOpen}
+        onClose={() => setIsRoomSwitcherOpen(false)}
+        rooms={userRooms}
+        currentRoomId={currentRoom?.id}
+        onSwitchRoom={switchRoom}
+        onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
+        onJoinRoom={joinRoomByToken}
       />
     </div>
   );

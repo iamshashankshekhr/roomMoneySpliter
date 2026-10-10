@@ -1,17 +1,21 @@
 import React from 'react';
-import { Users, Link as LinkIcon, Building2 } from 'lucide-react';
+import { ChevronDown, Link as LinkIcon, Building2, Plus } from 'lucide-react';
 
-export function RoomHeader({ room, members, currentUserId, onOpenInvite, onOpenNewRoom }) {
+export function RoomHeader({
+  room,
+  members,
+  currentUserId,
+  onOpenInvite,
+  onOpenRoomSwitcher,
+}) {
   const roomName = room?.name || 'Flat 402';
   const address = room?.settings?.address || 'Bellandur, BLR';
 
-  // Get initials for avatar
   const getInitials = (name) => {
     if (!name) return '?';
     return name.slice(0, 1).toUpperCase();
   };
 
-  // Color palette for member avatars matching Stitch design
   const avatarColors = [
     'bg-secondary text-on-secondary',
     'bg-primary-container text-white',
@@ -26,12 +30,19 @@ export function RoomHeader({ room, members, currentUserId, onOpenInvite, onOpenN
       <div className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-1.5">
+            {/* Interactive Room Switcher trigger */}
+            <button
+              type="button"
+              onClick={onOpenRoomSwitcher}
+              className="flex items-center gap-1.5 text-left group hover:opacity-80 transition-opacity"
+              title="Click to switch or create rooms"
+            >
               <Building2 className="w-4 h-4 text-secondary flex-shrink-0" />
-              <h1 className="font-bold font-headline text-base text-on-surface truncate">
+              <h1 className="font-bold font-headline text-base text-on-surface truncate group-hover:text-secondary transition-colors">
                 {roomName}
               </h1>
-            </div>
+              <ChevronDown className="w-4 h-4 text-outline group-hover:text-on-surface transition-colors" />
+            </button>
             <p className="text-xs text-on-surface-variant mt-0.5">
               {members.length} Roommates • {address}
             </p>

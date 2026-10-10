@@ -13,6 +13,7 @@ export function DashboardView({
   currentUserId,
   onOpenAddExpense,
   onOpenInvite,
+  onOpenRoomSwitcher,
   onNavigateTab,
   onDeleteExpense,
 }) {
@@ -36,6 +37,7 @@ export function DashboardView({
         members={members}
         currentUserId={currentUserId}
         onOpenInvite={onOpenInvite}
+        onOpenRoomSwitcher={onOpenRoomSwitcher}
       />
 
       {/* 2. Balance Hero Card */}

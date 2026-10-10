@@ -1,7 +1,14 @@
 import React from 'react';
-import { Users, UserPlus, Shield, Sparkles } from 'lucide-react';
+import { Users, UserPlus, Shield, Plus, ArrowRightLeft } from 'lucide-react';
 
-export function RoomMemberList({ members = [], currentUserId, onOpenInvite, room }) {
+export function RoomMemberList({
+  members = [],
+  currentUserId,
+  onOpenInvite,
+  onOpenCreateRoom,
+  onOpenRoomSwitcher,
+  room,
+}) {
   return (
     <div className="flex flex-col gap-4 pb-12">
       {/* Room Overview Card */}
@@ -22,6 +29,25 @@ export function RoomMemberList({ members = [], currentUserId, onOpenInvite, room
           >
             <UserPlus className="w-3.5 h-3.5" />
             <span>Invite</span>
+          </button>
+        </div>
+
+        {/* Room Switcher & Create Actions */}
+        <div className="grid grid-cols-2 gap-2 pt-1 border-t border-surface-container">
+          <button
+            onClick={onOpenRoomSwitcher}
+            className="h-9 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+          >
+            <ArrowRightLeft className="w-3.5 h-3.5 text-secondary" />
+            <span>Switch Room</span>
+          </button>
+
+          <button
+            onClick={onOpenCreateRoom}
+            className="h-9 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+          >
+            <Plus className="w-3.5 h-3.5 text-secondary" />
+            <span>+ Create Room</span>
           </button>
         </div>
       </div>

@@ -4,11 +4,12 @@ import { cacheRoomData, getCachedRoomData } from '../offline/idbOutbox';
 
 export function useRoom(user, profile) {
   const [currentRoom, setCurrentRoom] = useState(null);
+  const [userRooms, setUserRooms] = useState([]);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [inviteToken, setInviteToken] = useState('');
 
-  const loadRoom = useCallback(async () => {
+  const loadUserRoomsAndMembers = useCallback(async (preferredRoomId = null) => {
     if (!user) {
       setLoading(false);
       return;
@@ -17,7 +18,7 @@ export function useRoom(user, profile) {
     try {
       setLoading(true);
 
-      // 1. Fetch user's room memberships
+      // 1. Fetch all room memberships for current user
       const { data: memberRows, error: memberErr } = await supabase
         .from('room_members')
         .select('*, rooms(*)')
@@ -26,12 +27,22 @@ export function useRoom(user, profile) {
 
       if (memberErr) throw memberErr;
 
+      const validRooms = (memberRows || [])
+        .map(row => row.rooms)
+        .filter(Boolean);
+
+      setUserRooms(validRooms);
+
       let activeRoom = null;
 
-      if (memberRows && memberRows.length > 0) {
-        activeRoom = memberRows[0].rooms;
+      if (preferredRoomId) {
+        activeRoom = validRooms.find(r => r.id === preferredRoomId) || validRooms[0];
+      } else if (currentRoom?.id) {
+        activeRoom = validRooms.find(r => r.id === currentRoom.id) || validRooms[0];
+      } else if (validRooms.length > 0) {
+        activeRoom = validRooms[0];
       } else {
-        // First-time user: automatically create a default starter room for them
+        // First-time user without any room: automatically create a default starter room
         const { data: newRoom, error: roomErr } = await supabase
           .from('rooms')
           .insert({
@@ -45,6 +56,7 @@ export function useRoom(user, profile) {
 
         if (roomErr) throw roomErr;
         activeRoom = newRoom;
+        setUserRooms([newRoom]);
 
         // Add user as admin member
         await supabase.from('room_members').insert({
@@ -58,7 +70,7 @@ export function useRoom(user, profile) {
 
       setCurrentRoom(activeRoom);
 
-      // 2. Load all members of this active room
+      // 2. Load members of the active room
       if (activeRoom) {
         const { data: allMembers, error: allMemErr } = await supabase
           .from('room_members')
@@ -75,7 +87,6 @@ export function useRoom(user, profile) {
       }
     } catch (err) {
       console.warn('Network load failed, reading from IndexedDB cache:', err);
-      // Fallback to offline cache
       if (currentRoom?.id) {
         const cached = await getCachedRoomData(currentRoom.id);
         if (cached?.room) setCurrentRoom(cached.room);
@@ -84,11 +95,11 @@ export function useRoom(user, profile) {
     } finally {
       setLoading(false);
     }
-  }, [user, profile]);
+  }, [user, profile, currentRoom?.id]);
 
   useEffect(() => {
-    loadRoom();
-  }, [loadRoom]);
+    loadUserRoomsAndMembers();
+  }, [loadUserRoomsAndMembers]);
 
   // Realtime subscription for room members
   useEffect(() => {
@@ -100,7 +111,7 @@ export function useRoom(user, profile) {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'room_members', filter: `room_id=eq.${currentRoom.id}` },
         () => {
-          loadRoom();
+          loadUserRoomsAndMembers(currentRoom.id);
         }
       )
       .subscribe();
@@ -108,7 +119,47 @@ export function useRoom(user, profile) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [currentRoom?.id, loadRoom]);
+  }, [currentRoom?.id, loadUserRoomsAndMembers]);
+
+  // Switch active room
+  async function switchRoom(roomId) {
+    await loadUserRoomsAndMembers(roomId);
+  }
+
+  // Create new room
+  async function createNewRoom(roomName, address = '') {
+    if (!user) throw new Error('You must be signed in to create a room.');
+    if (!roomName.trim()) throw new Error('Room name is required.');
+
+    const { data: newRoom, error: roomErr } = await supabase
+      .from('rooms')
+      .insert({
+        name: roomName.trim(),
+        currency: 'INR',
+        created_by: user.id,
+        settings: { address: address.trim() || 'Shared Living' },
+      })
+      .select()
+      .single();
+
+    if (roomErr) throw roomErr;
+
+    // Add creator as admin member
+    const { error: memErr } = await supabase.from('room_members').insert({
+      room_id: newRoom.id,
+      user_id: user.id,
+      role: 'admin',
+      display_name: profile?.display_name || user.email?.split('@')[0] || 'Room Admin',
+      upi_id: profile?.upi_id || '',
+    });
+
+    if (memErr) throw memErr;
+
+    setUserRooms(prev => [newRoom, ...prev]);
+    setCurrentRoom(newRoom);
+    await loadUserRoomsAndMembers(newRoom.id);
+    return newRoom;
+  }
 
   // Generate or retrieve room invitation link
   async function createInviteLink() {
@@ -121,7 +172,7 @@ export function useRoom(user, profile) {
           room_id: currentRoom.id,
           token,
           created_by: user.id,
-          expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+          expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           usage_limit: 20,
         })
         .select()
@@ -141,81 +192,55 @@ export function useRoom(user, profile) {
   }
 
   // Join a room by token or ID
-  async function joinRoomByToken(token, userDisplayName = 'New Roommate', userUpiId = '') {
+  async function joinRoomByToken(token, userDisplayName = '', userUpiId = '') {
     if (!user) throw new Error('You must be signed in to join a room.');
 
-    // 1. Try finding by invitation token
-    const { data: invite, error: inviteErr } = await supabase
+    let targetRoomId = token;
+
+    // Check if token matches an invitation record
+    const { data: invite } = await supabase
       .from('room_invitations')
       .select('*, rooms(*)')
       .eq('token', token)
       .single();
 
-    let targetRoomId = null;
-    if (!inviteErr && invite?.room_id) {
+    if (invite?.room_id) {
       targetRoomId = invite.room_id;
-    } else {
-      targetRoomId = token; // Direct room ID fallback
     }
 
-    // 2. Add as room member
+    const name = userDisplayName || profile?.display_name || user.email?.split('@')[0] || 'New Roommate';
+    const upi = userUpiId || profile?.upi_id || '';
+
     const { data, error } = await supabase
       .from('room_members')
       .insert({
         room_id: targetRoomId,
         user_id: user.id,
         role: 'member',
-        display_name: userDisplayName,
-        upi_id: userUpiId,
+        display_name: name,
+        upi_id: upi,
       })
       .select()
       .single();
 
-    if (error && error.code !== '23505') { // Ignore unique constraint if already member
+    if (error && error.code !== '23505') {
       throw error;
     }
 
-    await loadRoom();
+    await loadUserRoomsAndMembers(targetRoomId);
     return data;
-  }
-
-  // Create new room
-  async function createNewRoom(roomName, address = '') {
-    if (!user) return;
-    const { data: newRoom, error } = await supabase
-      .from('rooms')
-      .insert({
-        name: roomName,
-        currency: 'INR',
-        created_by: user.id,
-        settings: { address },
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    await supabase.from('room_members').insert({
-      room_id: newRoom.id,
-      user_id: user.id,
-      role: 'admin',
-      display_name: profile?.display_name || 'Admin',
-      upi_id: profile?.upi_id || '',
-    });
-
-    setCurrentRoom(newRoom);
-    await loadRoom();
-    return newRoom;
   }
 
   return {
     currentRoom,
+    userRooms,
     members,
     loading,
     inviteToken,
+    switchRoom,
+    createNewRoom,
     createInviteLink,
     joinRoomByToken,
-    createNewRoom,
-    refreshRoom: loadRoom,
+    refreshRoom: loadUserRoomsAndMembers,
   };
 }

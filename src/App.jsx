@@ -24,6 +24,7 @@ import { CreateRoomModal } from './features/rooms/CreateRoomModal';
 import { RoomSwitcherModal } from './features/rooms/RoomSwitcherModal';
 import { RoomSettingsModal } from './features/rooms/RoomSettingsModal';
 import { PwaInstallPrompt } from './components/common/PwaInstallPrompt';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -320,6 +321,9 @@ export default function App() {
         onRenameRoom={renameRoom}
         onDeleteRoom={deleteRoom}
       />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 }

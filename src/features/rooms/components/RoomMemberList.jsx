@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Users, UserPlus, Shield, Plus, Building2, Check, ArrowRight, Link as LinkIcon, Sparkles, Settings } from 'lucide-react';
+import { Users, UserPlus, Shield, Plus, Building2, Check, ArrowRight, Link as LinkIcon, Sparkles, Settings, Edit2, X as CloseIcon } from 'lucide-react';
+import { supabase } from '../../../lib/supabase';
+import { isValidUpiId } from '../../../lib/upi';
 
 export function RoomMemberList({
   members = [],
@@ -11,10 +13,38 @@ export function RoomMemberList({
   onOpenRoomSettings,
   onSwitchRoom,
   onJoinRoom,
+  onRefreshRoom,
 }) {
   const [joinCode, setJoinCode] = useState('');
   const [isJoining, setIsJoining] = useState(false);
   const [joinMsg, setJoinMsg] = useState('');
+  const [editingUpiMemberId, setEditingUpiMemberId] = useState(null);
+  const [upiInputValue, setUpiInputValue] = useState('');
+  const [upiError, setUpiError] = useState('');
+  const [isSavingUpi, setIsSavingUpi] = useState(false);
+
+  async function handleSaveMyUpi(memberId) {
+    if (!upiInputValue.trim()) return;
+    if (!isValidUpiId(upiInputValue)) {
+      setUpiError('Enter valid UPI ID (e.g. name@okhdfcbank or 9876543210@paytm)');
+      return;
+    }
+    setIsSavingUpi(true);
+    setUpiError('');
+    try {
+      await supabase
+        .from('room_members')
+        .update({ upi_id: upiInputValue.trim() })
+        .eq('id', memberId);
+
+      setEditingUpiMemberId(null);
+      if (onRefreshRoom) onRefreshRoom();
+    } catch (err) {
+      setUpiError(err.message || 'Failed to save UPI ID');
+    } finally {
+      setIsSavingUpi(false);
+    }
+  }
 
   async function handleJoinSubmit(e) {
     e.preventDefault();
@@ -220,9 +250,55 @@ export function RoomMemberList({
                         </span>
                       )}
                     </div>
-                    <span className="text-[11px] text-on-surface-variant">
-                      {member.upi_id ? `UPI: ${member.upi_id}` : 'No UPI configured'}
-                    </span>
+                    {editingUpiMemberId === member.id ? (
+                      <div className="flex flex-col gap-1 mt-1">
+                        <div className="flex items-center gap-1.5">
+                          <input
+                            type="text"
+                            placeholder="yourname@bank"
+                            value={upiInputValue}
+                            onChange={e => setUpiInputValue(e.target.value)}
+                            className="h-8 px-2.5 rounded-lg bg-surface-container border border-outline-variant text-[11px] font-mono outline-none focus:border-secondary"
+                          />
+                          <button
+                            onClick={() => handleSaveMyUpi(member.id)}
+                            disabled={isSavingUpi}
+                            className="h-8 px-2.5 bg-secondary text-white text-[11px] font-bold rounded-lg"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditingUpiMemberId(null);
+                              setUpiError('');
+                            }}
+                            className="h-8 px-2 text-outline text-[11px]"
+                          >
+                            <CloseIcon className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        {upiError && <span className="text-[10px] text-error font-medium">{upiError}</span>}
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-[11px] text-on-surface-variant font-mono">
+                          {member.upi_id ? `UPI: ${member.upi_id}` : 'No UPI configured'}
+                        </span>
+                        {isMe && (
+                          <button
+                            onClick={() => {
+                              setEditingUpiMemberId(member.id);
+                              setUpiInputValue(member.upi_id || '');
+                              setUpiError('');
+                            }}
+                            className="text-[10px] text-secondary font-semibold hover:underline flex items-center gap-0.5"
+                          >
+                            <Edit2 className="w-2.5 h-2.5" />
+                            <span>{member.upi_id ? 'Change' : '+ Add UPI'}</span>
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 

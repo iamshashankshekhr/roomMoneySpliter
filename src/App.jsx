@@ -175,10 +175,12 @@ export default function App() {
                 </div>
               </div>
               <SettlementView
+                roomId={currentRoom?.id}
                 members={members}
                 expenses={expenses}
                 splits={splits}
                 currentUserId={user?.id}
+                onRefreshRoom={refreshRoom}
               />
             </div>
           )}
@@ -194,6 +196,7 @@ export default function App() {
               onOpenRoomSettings={() => setIsRoomSettingsOpen(true)}
               onSwitchRoom={switchRoom}
               onJoinRoom={joinRoomByToken}
+              onRefreshRoom={refreshRoom}
             />
           )}
         </div>

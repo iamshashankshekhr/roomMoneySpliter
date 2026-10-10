@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-primary": "#bec6e0", "on-primary": "#ffffff", "surface-variant": "#d3e4fe", "on-primary-container": "#7c839b", "tertiary-container": "#00201d", "surface-tint": "#565e74", "on-surface": "#0b1c30", "on-secondary-container": "#fffbff", "on-background": "#0b1c30", "on-tertiary-fixed-variant": "#005049", "surface-container": "#e5eeff", "on-secondary-fixed": "#0f0069", "error-container": "#ffdad6", "tertiary-fixed": "#89f5e7", "surface-container-high": "#dce9ff", "on-error": "#ffffff", "primary": "#000000", "on-error-container": "#93000a", "background": "#f8f9ff", "surface-container-low": "#eff4ff", "surface": "#f8f9ff", "surface-container-highest": "#d3e4fe", "inverse-surface": "#213145", "primary-fixed": "#dae2fd", "outline": "#76777d", "on-secondary-fixed-variant": "#3323cc", "secondary-fixed-dim": "#c3c0ff", "tertiary": "#000000", "on-surface-variant": "#45464d", "on-tertiary-fixed": "#00201d", "on-tertiary": "#ffffff", "tertiary-fixed-dim": "#6bd8cb", "on-secondary": "#ffffff", "secondary-fixed": "#e2dfff", "surface-container-lowest": "#ffffff", "primary-container": "#131b2e", "surface-bright": "#f8f9ff", "surface-dim": "#cbdbf5", "on-tertiary-container": "#0c9488", "inverse-on-surface": "#eaf1ff", "primary-fixed-dim": "#bec6e0", "outline-variant": "#c6c6cd", "error": "#ba1a1a", "on-primary-fixed": "#131b2e", "secondary-container": "#645efb", "secondary": "#4b41e1", "on-primary-fixed-variant": "#3f465c" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2rem", "margin": "1.5rem", "gutter-mobile": "0.75rem", "space-md": "1rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "gutter": "1rem", "margin-mobile": "1rem", "space-sm": "0.5rem" }, "fontFamily": { "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "display-currency": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "display-currency-mobile": ["Plus Jakarta Sans"], "label-lg": ["Inter"], "label-sm": ["Inter"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"] }, "fontSize": { "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}], "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}], "display-currency": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "700"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "display-currency-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}], "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}], "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}], "headline-lg-mobile": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700"}] } } } }</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-margin-mobile flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="RoomSplit Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UsrSeoxVZAWMZXuSJgbk0jgSaINOIsXErp49_HwAS8nz32IGMl_C65ntSjR8RqISDdAXiL8LdhFFloVEZC6qKbkt1tbO6bjM-ORBxGAehSdmTUOsAOKONvIVpe_p7dXLHKsDRjkLhRXrCWKowaUfqo0yzIXazt_6pmRir079KNnnrOGv8Eoc2AvlCKpU51xhh92_OGFCyip_3oLKo53EcBjdFJJCpPrEYxooWxBqPsXRPrCwRN7mrQ25DK"/><div class="flex flex-col min-w-0 flex-1"><div class="flex items-center gap-space-xs"><button class="flex items-center gap-space-xs min-h-[44px] min-w-[44px] text-left group" type="button"><span class="font-headline-sm text-headline-sm text-on-surface font-bold truncate max-w-[150px]">Flat 402</span><span class="material-symbols-outlined text-outline text-[18px] group-hover:text-on-surface transition-colors">arrow_drop_down</span></button><div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex-shrink-0"><span class="material-symbols-outlined text-[13px]">group</span><span>4</span></div></div><div class="flex items-center gap-1.5 -mt-1"><span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface-variant">Synced</span><span class="text-outline-variant text-[10px]">•</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Home</span></div></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Profile &amp; Room Settings" class="min-h-[44px] min-w-[44px] flex items-center justify-center p-1 rounded-full hover:bg-surface-container-low transition-colors" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXs0qMYrFNd4-GBurGnmzVi8vHt0g1IMewSTkIcLHke611H9dUHsfLLZSjjXcqj_yVChssAsHBjmYA0DN13awn9w3hJlCsJmKhiRUmxh-mUNl1MQtSNiUH-sIaeKj2ol1DtdwYKN0HNcCHvgc5pMIJS7NWqJHtnVNRc9HZ_eC7idSiSHDEndL62P_QuOxCFpq0N9BN4HBVCjUfKKZwddrLgGilYdqZIzltjY4m3pAlIzxzQksiE9VTCg"/></button></div></div></header><main class="flex-1 w-full bg-surface pt-20 pb-28"><div class="flex flex-col w-full">
+<!-- Top Offline & Sync Toast Indicator -->
+<div class="px-margin-mobile pt-space-xs pb-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-on-tertiary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-on-tertiary-container"></span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+        Online &amp; Synced <span class="text-outline-variant">•</span> Last updated just now
+      </span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded-full text-on-surface-variant font-label-sm text-label-sm shadow-sm">
+<span class="material-symbols-outlined text-[13px] text-on-surface-variant">offline_pin</span>
+<span>Cache Ready</span>
+</div>
+</div>
+<!-- Room Identity Banner -->
+<section class="px-margin-mobile mb-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[18px]">apartment</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">Flat 402 — Green Glen</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">4 Roommates • Bellandur, BLR</p>
+</div>
+<button class="h-10 px-3 bg-surface-container-low hover:bg-surface-container text-secondary rounded-lg font-label-md text-label-md flex items-center gap-1.5 transition-colors active:scale-95 flex-shrink-0" id="inviteBtn" title="Copy Room Invite Link" type="button">
+<span class="material-symbols-outlined text-[16px]">link</span>
+<span>Invite</span>
+</button>
+</div>
+<!-- Roommates Avatars Row -->
+<div class="flex items-center gap-2 pt-1 overflow-x-auto">
+<div class="flex items-center gap-1.5 bg-secondary-fixed/50 pl-1 pr-2.5 py-1 rounded-full flex-shrink-0">
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm flex items-center justify-center font-bold">A</div>
+<span class="font-label-md text-label-md text-on-secondary-fixed font-bold">Aditi (You)</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container pl-1 pr-2.5 py-1 rounded-full flex-shrink-0">
+<div class="w-6 h-6 rounded-full bg-primary-container text-surface-container-lowest font-label-sm text-label-sm flex items-center justify-center font-bold">R</div>
+<span class="font-label-md text-label-md text-on-surface">Rahul</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container pl-1 pr-2.5 py-1 rounded-full flex-shrink-0">
+<div class="w-6 h-6 rounded-full bg-outline text-surface-container-lowest font-label-sm text-label-sm flex items-center justify-center font-bold">V</div>
+<span class="font-label-md text-label-md text-on-surface">Vikram</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container pl-1 pr-2.5 py-1 rounded-full flex-shrink-0">
+<div class="w-6 h-6 rounded-full bg-surface-tint text-surface-container-lowest font-label-sm text-label-sm flex items-center justify-center font-bold">P</div>
+<span class="font-label-md text-label-md text-on-surface">Priya</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Balance Overview Hero Card (Fintech Precision with Human Touch) -->
+<section class="px-margin-mobile mb-space-md">
+<div class="relative overflow-hidden bg-primary-container rounded-xl p-space-lg text-on-primary shadow-md">
+<!-- Ambient Graphic Accent -->
+<div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-secondary-container/20 blur-2xl pointer-events-none"></div>
+<div class="absolute right-4 bottom-3 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[96px] text-surface-container-lowest">savings</span>
+</div>
+<div class="relative z-10 flex flex-col">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md uppercase tracking-wider text-inverse-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">arrow_circle_up</span>
+            You are owed overall
+          </span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed-dim/20 text-tertiary-fixed font-label-sm text-label-sm font-bold">Net Positive</span>
+</div>
+<div class="flex items-baseline gap-1 my-1">
+<span class="font-display-currency-mobile text-display-currency-mobile font-bold tracking-tight text-tertiary-fixed">
+            +₹2,340.00
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-inverse-primary/80 mb-space-md">
+          Great job! Housemates owe you more than your pending shared expenses.
+        </p>
+<!-- Breakdown Split Metrics -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs border-none">
+<div class="bg-surface-container-lowest/10 backdrop-blur-md p-space-sm rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-inverse-primary">You paid out</span>
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest font-bold mt-0.5">₹8,420</span>
+<span class="font-label-sm text-label-sm text-inverse-primary/70 mt-0.5">7 transactions</span>
+</div>
+<div class="bg-surface-container-lowest/10 backdrop-blur-md p-space-sm rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-inverse-primary">Your fair share</span>
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest font-bold mt-0.5">₹6,080</span>
+<span class="font-label-sm text-label-sm text-inverse-primary/70 mt-0.5">Personal cost</span>
+</div>
+</div>
+<!-- Room Total Bar -->
+<div class="mt-space-md pt-3 flex items-center justify-between text-inverse-primary bg-surface-container-lowest/5 -mx-space-lg -mb-space-lg px-space-lg py-3 rounded-b-xl">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">calendar_month</span>
+<span class="font-label-sm text-label-sm font-semibold text-inverse-primary">₹24,850 total spent in October</span>
+</div>
+<span class="font-label-sm text-label-sm text-inverse-primary/80">34 expenses</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Actions Row -->
+<section class="px-margin-mobile mb-space-md">
+<div class="grid grid-cols-3 gap-space-sm">
+<!-- Add Expense Primary Action -->
+<button aria-label="Add New Expense" class="col-span-1 h-16 bg-secondary text-on-secondary rounded-xl flex flex-col items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform" onclick="location.href='#'" type="button">
+<div class="w-7 h-7 rounded-full bg-on-secondary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] font-bold">add</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold tracking-tight">Add Expense</span>
+</button>
+<!-- Settle Up UPI -->
+<button class="col-span-1 h-16 bg-surface-container-lowest text-on-surface rounded-xl flex flex-col items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform" id="settleUpiBtn" type="button">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+</div>
+<span class="font-label-sm text-label-sm font-semibold tracking-tight text-on-surface">Settle via UPI</span>
+</button>
+<!-- Share WhatsApp -->
+<button class="col-span-1 h-16 bg-surface-container-lowest text-on-surface rounded-xl flex flex-col items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform" id="whatsappShareBtn" type="button">
+<div class="w-7 h-7 rounded-full bg-surface-variant flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</div>
+<span class="font-label-sm text-label-sm font-semibold tracking-tight text-on-surface">WhatsApp Dues</span>
+</button>
+</div>
+</section>
+<!-- Debt Simplification Snapshot ("Who Owes You") -->
+<section class="px-margin-mobile mb-space-lg">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[20px]">account_balance_wallet</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Who Owes You</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-semibold">2 Roommates</span>
+</div>
+<div class="space-y-space-sm">
+<!-- Debtor Card 1: Rahul -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative flex-shrink-0">
+<div class="w-11 h-11 rounded-full bg-primary-container text-surface-container-lowest flex items-center justify-center font-headline-sm text-headline-sm font-bold">
+              R
+            </div>
+<span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-secondary border-none flex items-center justify-center text-[9px] text-on-secondary font-bold">✓</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface font-bold truncate">Rahul Sharma</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Groceries &amp; Water bill share</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="font-label-sm text-label-sm text-outline">UPI: rahul@okhdfcbank</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-tertiary-container">+₹1,450</span>
+<div class="flex items-center gap-1.5 mt-1.5">
+<button class="h-9 px-3 bg-secondary text-on-secondary rounded-lg font-label-md text-label-md font-semibold flex items-center gap-1 shadow-sm active:scale-95 transition-all" onclick="handleUpiRequest('Rahul', 1450, 'rahul@okhdfcbank')" type="button">
+<span class="material-symbols-outlined text-[15px]">send_to_mobile</span>
+<span>Request</span>
+</button>
+<button class="h-9 w-9 bg-surface-container-low hover:bg-surface-container text-on-surface-variant rounded-lg flex items-center justify-center active:scale-95 transition-colors" onclick="handleRemind('Rahul', 1450)" title="Send Friendly Ping" type="button">
+<span class="material-symbols-outlined text-[18px]">notifications_active</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Debtor Card 2: Vikram -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="relative flex-shrink-0">
+<div class="w-11 h-11 rounded-full bg-outline text-surface-container-lowest flex items-center justify-center font-headline-sm text-headline-sm font-bold">
+              V
+            </div>
+</div>
+<div class="min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface font-bold truncate">Vikram Nayak</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Gas Cylinder refill balance</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="font-label-sm text-label-sm text-outline">UPI: vikram@icici</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-tertiary-container">+₹890</span>
+<div class="flex items-center gap-1.5 mt-1.5">
+<button class="h-9 px-3 bg-secondary text-on-secondary rounded-lg font-label-md text-label-md font-semibold flex items-center gap-1 shadow-sm active:scale-95 transition-all" onclick="handleUpiRequest('Vikram', 890, 'vikram@icici')" type="button">
+<span class="material-symbols-outlined text-[15px]">send_to_mobile</span>
+<span>Request</span>
+</button>
+<button class="h-9 w-9 bg-surface-container-low hover:bg-surface-container text-on-surface-variant rounded-lg flex items-center justify-center active:scale-95 transition-colors" onclick="handleRemind('Vikram', 890)" title="Send Friendly Ping" type="button">
+<span class="material-symbols-outlined text-[18px]">notifications_active</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Expenses Feed Preview -->
+<section class="px-margin-mobile mb-space-lg">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[20px]">receipt_long</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Recent Expenses</h3>
+</div>
+<a class="font-label-md text-label-md text-secondary font-bold flex items-center gap-0.5 hover:underline" href="#">
+        View All (34)
+        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<!-- Feed Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Item 1: Groceries -->
+<div class="p-space-md flex items-center justify-between gap-space-sm hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed/30 text-on-tertiary-fixed-variant flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">shopping_cart</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Groceries at Nature's Basket</h4>
+<div class="flex items-center gap-1.5 flex-wrap mt-0.5">
+<span class="font-body-sm text-body-sm text-on-tertiary-container font-semibold">You paid</span>
+<span class="text-outline-variant text-[10px]">•</span>
+<span class="font-label-sm text-label-sm bg-surface-container-high px-1.5 py-0.2 rounded text-on-surface-variant">Split by 4 (₹420/ea)</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline text-[11px] block mt-0.5">Today, 2:15 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹1,680</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-bold mt-0.5">+₹1,260 share</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<!-- Item 2: Wi-Fi -->
+<div class="p-space-md flex items-center justify-between gap-space-sm hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-xl bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">wifi</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Wi-Fi 300 Mbps Plan</h4>
+<div class="flex items-center gap-1.5 flex-wrap mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Vikram paid</span>
+<span class="text-outline-variant text-[10px]">•</span>
+<span class="font-label-sm text-label-sm bg-surface-container-high px-1.5 py-0.2 rounded text-on-surface-variant">Split by 4</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline text-[11px] block mt-0.5">Yesterday, 8:40 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹1,179</span>
+<span class="font-label-sm text-label-sm text-error font-bold mt-0.5">-₹294 share</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<!-- Item 3: Drinking Water -->
+<div class="p-space-md flex items-center justify-between gap-space-sm hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-variant text-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">water_drop</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Drinking Water 20L Cans</h4>
+<div class="flex items-center gap-1.5 flex-wrap mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Rahul paid</span>
+<span class="text-outline-variant text-[10px]">•</span>
+<span class="font-label-sm text-label-sm bg-error-container text-on-error-container px-1.5 py-0.2 rounded font-semibold">Split 3 (Vikram excl.)</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline text-[11px] block mt-0.5">2 days ago</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹360</span>
+<span class="font-label-sm text-label-sm text-error font-bold mt-0.5">-₹120 share</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<!-- Item 4: Gas Cylinder -->
+<div class="p-space-md flex items-center justify-between gap-space-sm hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-xl bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">local_fire_department</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Gas Cylinder Refill</h4>
+<div class="flex items-center gap-1.5 flex-wrap mt-0.5">
+<span class="font-body-sm text-body-sm text-on-tertiary-container font-semibold">You paid</span>
+<span class="text-outline-variant text-[10px]">•</span>
+<span class="font-label-sm text-label-sm bg-surface-container-high px-1.5 py-0.2 rounded text-on-surface-variant">Split by 4</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline text-[11px] block mt-0.5">3 Oct, 11:10 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹1,120</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-bold mt-0.5">+₹840 share</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Modal / Toast Notification Container (Discreet Micro-delight) -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 max-w-[90%] w-auto bg-primary-container text-surface-container-lowest px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-3" id="statusToast">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]" id="toastIcon">check_circle</span>
+<span class="font-label-md text-label-md truncate" id="toastMessage">Action completed!</span>
+</div>
+</div>
+<script>
+  function showToast(message, icon = 'check_circle') {
+    const toast = document.getElementById('statusToast');
+    const msg = document.getElementById('toastMessage');
+    const ico = document.getElementById('toastIcon');
+    if (!toast || !msg || !ico) return;
+
+    msg.textContent = message;
+    ico.textContent = icon;
+    toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+    }, 2800);
+  }
+
+  // Invite Room link copy
+  document.getElementById('inviteBtn')?.addEventListener('click', () => {
+    const inviteUrl = 'https://roomsplit.app/join/FLAT402-BLR';
+    navigator.clipboard?.writeText(inviteUrl);
+    showToast('Room invite link copied to clipboard! 📋', 'link');
+  });
+
+  // WhatsApp Summary sharing
+  document.getElementById('whatsappShareBtn')?.addEventListener('click', () => {
+    const summary = `🏠 *RoomSplit October Dues - Flat 402*\n` +
+      `Total Spent: ₹24,850 (34 expenses)\n` +
+      `━━━━━━━━━━━━━━━━━━━\n` +
+      `• Rahul owes Aditi: ₹1,450\n` +
+      `• Vikram owes Aditi: ₹890\n` +
+      `━━━━━━━━━━━━━━━━━━━\n` +
+      `👉 Settle now via UPI link: https://roomsplit.app/r/flat402`;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: 'Flat 402 Monthly Summary',
+        text: summary,
+      }).catch(() => {});
+    } else {
+      navigator.clipboard?.writeText(summary);
+      showToast('WhatsApp summary text copied! Share with roomies 🚀', 'chat');
+    }
+  });
+
+  // Settle via UPI general trigger
+  document.getElementById('settleUpiBtn')?.addEventListener('click', () => {
+    showToast('Opening UPI settlement directory...', 'qr_code_scanner');
+  });
+
+  // Request via UPI deep-link handler
+  function handleUpiRequest(name, amount, upiId) {
+    const note = encodeURIComponent(`Flat 402 share settlement for ${name}`);
+    const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${note}`;
+    showToast(`Payment intent generated for ₹${amount} (${name})`, 'currency_rupee');
+    
+    // In production PWA, this opens the UPI intent selector:
+    // window.location.href = upiLink;
+  }
+
+  // Friendly nudge handler
+  function handleRemind(name, amount) {
+    showToast(`Sent friendly reminder to ${name} for ₹${amount} ✨`, 'send');
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(15,23,42,0.06)]" data-active-classes="text-secondary font-bold"><div class="flex items-center justify-around h-20 px-space-xs"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1 px-2 transition-colors text-secondary font-bold" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1 px-2 text-on-surface-variant transition-colors hover:text-on-surface" data-path="expenses" href="#"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="font-label-sm text-label-sm mt-0.5">Expenses</span></a><div class="flex items-center justify-center relative -top-3.5"><a aria-label="Add Expense" class="flex items-center justify-center w-14 h-14 min-w-[48px] min-h-[48px] rounded-full bg-secondary text-on-secondary shadow-[0_8px_16px_rgba(75,65,225,0.32)] hover:bg-secondary-container transition-transform active:scale-95" data-path="add-expense" href="#"><span class="material-symbols-outlined text-[28px] font-bold">add</span></a></div><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1 px-2 text-on-surface-variant transition-colors hover:text-on-surface" data-path="settlements" href="#"><span class="material-symbols-outlined text-[24px]">sync_alt</span><span class="font-label-sm text-label-sm mt-0.5">Settlements</span></a></div></nav></body></html>

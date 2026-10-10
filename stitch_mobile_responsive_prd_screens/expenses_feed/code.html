@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-primary": "#bec6e0", "on-primary": "#ffffff", "surface-variant": "#d3e4fe", "on-primary-container": "#7c839b", "tertiary-container": "#00201d", "surface-tint": "#565e74", "on-surface": "#0b1c30", "on-secondary-container": "#fffbff", "on-background": "#0b1c30", "on-tertiary-fixed-variant": "#005049", "surface-container": "#e5eeff", "on-secondary-fixed": "#0f0069", "error-container": "#ffdad6", "tertiary-fixed": "#89f5e7", "surface-container-high": "#dce9ff", "on-error": "#ffffff", "primary": "#000000", "on-error-container": "#93000a", "background": "#f8f9ff", "surface-container-low": "#eff4ff", "surface": "#f8f9ff", "surface-container-highest": "#d3e4fe", "inverse-surface": "#213145", "primary-fixed": "#dae2fd", "outline": "#76777d", "on-secondary-fixed-variant": "#3323cc", "secondary-fixed-dim": "#c3c0ff", "tertiary": "#000000", "on-surface-variant": "#45464d", "on-tertiary-fixed": "#00201d", "on-tertiary": "#ffffff", "tertiary-fixed-dim": "#6bd8cb", "on-secondary": "#ffffff", "secondary-fixed": "#e2dfff", "surface-container-lowest": "#ffffff", "primary-container": "#131b2e", "surface-bright": "#f8f9ff", "surface-dim": "#cbdbf5", "on-tertiary-container": "#0c9488", "inverse-on-surface": "#eaf1ff", "primary-fixed-dim": "#bec6e0", "outline-variant": "#c6c6cd", "error": "#ba1a1a", "on-primary-fixed": "#131b2e", "secondary-container": "#645efb", "secondary": "#4b41e1", "on-primary-fixed-variant": "#3f465c" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2rem", "margin": "1.5rem", "gutter-mobile": "0.75rem", "space-md": "1rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "gutter": "1rem", "margin-mobile": "1rem", "space-sm": "0.5rem" }, "fontFamily": { "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "display-currency": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "display-currency-mobile": ["Plus Jakarta Sans"], "label-lg": ["Inter"], "label-sm": ["Inter"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"] }, "fontSize": { "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}], "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}], "display-currency": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "700"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "display-currency-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}], "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}], "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}], "headline-lg-mobile": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700"}] } } } }</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-margin-mobile flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="RoomSplit Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UsrSeoxVZAWMZXuSJgbk0jgSaINOIsXErp49_HwAS8nz32IGMl_C65ntSjR8RqISDdAXiL8LdhFFloVEZC6qKbkt1tbO6bjM-ORBxGAehSdmTUOsAOKONvIVpe_p7dXLHKsDRjkLhRXrCWKowaUfqo0yzIXazt_6pmRir079KNnnrOGv8Eoc2AvlCKpU51xhh92_OGFCyip_3oLKo53EcBjdFJJCpPrEYxooWxBqPsXRPrCwRN7mrQ25DK"/><div class="flex flex-col min-w-0 flex-1"><div class="flex items-center gap-space-xs"><button class="flex items-center gap-space-xs min-h-[44px] min-w-[44px] text-left group" type="button"><span class="font-headline-sm text-headline-sm text-on-surface font-bold truncate max-w-[150px]">Flat 402</span><span class="material-symbols-outlined text-outline text-[18px] group-hover:text-on-surface transition-colors">arrow_drop_down</span></button><div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex-shrink-0"><span class="material-symbols-outlined text-[13px]">group</span><span>4</span></div></div><div class="flex items-center gap-1.5 -mt-1"><span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface-variant">Synced</span><span class="text-outline-variant text-[10px]">•</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Expenses</span></div></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Profile &amp; Room Settings" class="min-h-[44px] min-w-[44px] flex items-center justify-center p-1 rounded-full hover:bg-surface-container-low transition-colors" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXs0qMYrFNd4-GBurGnmzVi8vHt0g1IMewSTkIcLHke611H9dUHsfLLZSjjXcqj_yVChssAsHBjmYA0DN13awn9w3hJlCsJmKhiRUmxh-mUNl1MQtSNiUH-sIaeKj2ol1DtdwYKN0HNcCHvgc5pMIJS7NWqJHtnVNRc9HZ_eC7idSiSHDEndL62P_QuOxCFpq0N9BN4HBVCjUfKKZwddrLgGilYdqZIzltjY4m3pAlIzxzQksiE9VTCg"/></button></div></div></header><main class="flex-1 w-full bg-surface pt-20 pb-28"><div class="flex flex-col w-full">
+<!-- Top Search & Quick Filter Bar -->
+<div class="px-margin-mobile pt-space-sm pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<div class="flex-1 flex items-center h-12 bg-surface-container-lowest rounded-full px-space-md shadow-sm">
+<span class="material-symbols-outlined text-outline text-[22px] flex-shrink-0">search</span>
+<input class="w-full bg-transparent border-none text-body-md text-on-surface placeholder:text-outline focus:outline-none ml-space-xs" id="search-input" placeholder="Search expenses, bills, payers..." type="text"/>
+</div>
+<button aria-label="Open filter drawer" class="h-12 w-12 flex-shrink-0 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors relative" id="filter-toggle-btn" type="button">
+<span class="material-symbols-outlined text-[22px]">tune</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-secondary"></span>
+</button>
+</div>
+</div>
+<!-- Month Selector & Overview Metric Bar -->
+<div class="px-margin-mobile py-space-xs">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<button class="flex items-center gap-1 group text-left" type="button">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">October 2026</span>
+<span class="material-symbols-outlined text-outline text-[20px] group-hover:text-on-surface transition-colors">keyboard_arrow_down</span>
+</button>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">Total Flat Spend</span>
+<span class="text-outline-variant text-[10px]">•</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-semibold">34 expenses</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">₹24,850.00</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Validated in paise</span>
+</div>
+</div>
+</div>
+<!-- Offline Outbox Capability Banner (FR-SYNC-04 / FR-SYNC-06) -->
+<div class="px-margin-mobile py-space-xs">
+<div class="bg-surface-container-high rounded-xl p-3 shadow-sm flex items-center justify-between gap-space-sm transition-all duration-300" id="offline-banner">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center flex-shrink-0 text-secondary">
+<span class="material-symbols-outlined text-[18px] animate-spin" style="animation-duration: 3s;">sync</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm bg-surface-container-lowest text-on-surface px-1.5 py-0.5 rounded-full font-bold">1 Outbox</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold truncate">Queued offline</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Idempotency key lock active</p>
+</div>
+</div>
+<button class="h-8 px-3 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-semibold flex items-center gap-1 shadow-sm active:scale-95 transition-transform flex-shrink-0" id="sync-btn" type="button">
+<span class="material-symbols-outlined text-[14px]">cloud_upload</span>
+<span>Sync Now</span>
+</button>
+</div>
+</div>
+<!-- Horizontal Category Filter Chips -->
+<div class="py-space-xs overflow-x-auto no-scrollbar">
+<div class="flex items-center gap-space-xs px-margin-mobile min-w-max" id="category-chips">
+<button class="category-chip h-9 px-4 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center gap-1 shadow-sm active:scale-95 transition-all" data-category="all" type="button">
+        All
+      </button>
+<button class="category-chip h-9 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" data-category="groceries" type="button">
+<span>🛒</span>
+<span>Groceries</span>
+</button>
+<button class="category-chip h-9 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" data-category="utilities" type="button">
+<span>⚡</span>
+<span>Utilities</span>
+</button>
+<button class="category-chip h-9 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" data-category="rent" type="button">
+<span>🏠</span>
+<span>Rent</span>
+</button>
+<button class="category-chip h-9 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" data-category="food" type="button">
+<span>🍕</span>
+<span>Food &amp; Meals</span>
+</button>
+<button class="category-chip h-9 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" data-category="household" type="button">
+<span>🧹</span>
+<span>Household</span>
+</button>
+<button class="category-chip h-9 px-3.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 shadow-sm active:scale-95 transition-all" data-category="water" type="button">
+<span>💧</span>
+<span>Water</span>
+</button>
+</div>
+</div>
+<!-- Expenses Feed List Grouped by Date -->
+<div class="px-margin-mobile flex flex-col gap-space-md pt-space-xs pb-space-lg">
+<!-- Section: Today, 24 Oct -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Today, 24 Oct</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">2 items · ₹1,685.00</span>
+</div>
+<!-- Item 1: Blinkit (Pending Sync / Offline) -->
+<div class="expense-card group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all active:scale-[0.99] flex flex-col gap-space-xs cursor-pointer" data-category="groceries">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center flex-shrink-0 text-xl relative">
+              🛒
+              <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[12px] text-outline">hourglass_top</span>
+</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">Blinkit Quick Groceries</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">You paid total</p>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹485.00</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-semibold mt-0.5">+₹363.75 lent</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 text-body-sm">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">group</span>
+              4 participants (₹121.25 ea)
+            </span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-semibold flex-shrink-0">
+<span class="material-symbols-outlined text-[12px] text-outline">cloud_off</span>
+            Pending Sync
+          </span>
+</div>
+</div>
+<!-- Item 2: Urban Company Cleaning -->
+<div class="expense-card group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all active:scale-[0.99] flex flex-col gap-space-xs cursor-pointer" data-category="household">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center flex-shrink-0 text-xl">
+              🧹
+            </div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">Urban Company House Cleaning</h4>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="font-label-sm text-label-sm bg-surface-container-low text-on-surface-variant px-1.5 py-0.5 rounded-md font-semibold">Paid by Priya</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹1,200.00</span>
+<span class="font-label-sm text-label-sm text-error font-semibold mt-0.5">-₹300.00 share</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">group</span>
+            4 participants
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Your share: ₹300.00</span>
+</div>
+</div>
+</div>
+<!-- Section: Yesterday, 23 Oct -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Yesterday, 23 Oct</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">2 items · ₹2,859.00</span>
+</div>
+<!-- Item 3: Nature's Basket -->
+<div class="expense-card group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all active:scale-[0.99] flex flex-col gap-space-xs cursor-pointer" data-category="groceries">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center flex-shrink-0 text-xl">
+              🛒
+            </div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">Nature's Basket Organic Groceries</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Paid by You</p>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹1,680.00</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-semibold mt-0.5">+₹1,260.00 lent</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">pie_chart</span>
+              Split equally (4 members)
+            </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">420.00 each</span>
+</div>
+</div>
+<!-- Item 4: ACT Fibernet -->
+<div class="expense-card group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all active:scale-[0.99] flex flex-col gap-space-xs cursor-pointer" data-category="utilities">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center flex-shrink-0 text-xl">
+              ⚡
+            </div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">ACT Fibernet Broadband</h4>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="font-label-sm text-label-sm bg-surface-container-low text-on-surface-variant px-1.5 py-0.5 rounded-md font-semibold">Paid by Vikram</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹1,179.00</span>
+<span class="font-label-sm text-label-sm text-error font-semibold mt-0.5">-₹294.75 share</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">group</span>
+            Split by 4
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Your share: ₹294.75</span>
+</div>
+</div>
+</div>
+<!-- Section: 21 Oct 2026 -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">21 Oct 2026</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">2 items · ₹2,810.00</span>
+</div>
+<!-- Item 5: Bisleri (Excluded member scenario) -->
+<div class="expense-card group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all active:scale-[0.99] flex flex-col gap-space-xs cursor-pointer" data-category="water">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center flex-shrink-0 text-xl">
+              💧
+            </div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">Bisleri 20L Water Can x 4</h4>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="font-label-sm text-label-sm bg-surface-container-low text-on-surface-variant px-1.5 py-0.5 rounded-md font-semibold">Paid by Rahul</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹360.00</span>
+<span class="font-label-sm text-label-sm text-error font-semibold mt-0.5">-₹120.00 share</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">person_remove</span>
+            Split by 3 (Vikram excluded)
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Your share: ₹120.00</span>
+</div>
+</div>
+<!-- Item 6: Swiggy Party Dinner -->
+<div class="expense-card group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all active:scale-[0.99] flex flex-col gap-space-xs cursor-pointer" data-category="food">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center flex-shrink-0 text-xl">
+              🍕
+            </div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold truncate">Swiggy Party Dinner</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Paid by You</p>
+</div>
+</div>
+<div class="flex flex-col items-end flex-shrink-0">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">₹2,450.00</span>
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-semibold mt-0.5">+₹1,837.50 lent</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">group</span>
+            Split by 4
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Your share: ₹612.50</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Detail Modal Bottom Sheet for Micro-Interaction -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm hidden items-end justify-center" id="expense-modal">
+<div class="bg-surface-container-lowest w-full max-w-md rounded-t-3xl p-margin flex flex-col gap-space-md shadow-xl transition-transform">
+<div class="w-12 h-1.5 rounded-full bg-outline-variant mx-auto"></div>
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-bold" id="modal-category">Category</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold mt-0.5" id="modal-title">Expense Title</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5" id="modal-date">Date &amp; Time</p>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant" id="close-modal-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Total Bill</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface" id="modal-total">₹0.00</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Payer</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface" id="modal-payer">You</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Your Net Impact</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-tertiary-container" id="modal-impact">+₹0.00</span>
+</div>
+</div>
+<!-- Split Breakdown Breakdown -->
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Paise-Validated Allocations</span>
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold flex items-center justify-center">Y</span>
+<span class="font-body-md text-body-md text-on-surface">You</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">25% (Exact)</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center">P</span>
+<span class="font-body-md text-body-md text-on-surface">Priya</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">25% (Exact)</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center">V</span>
+<span class="font-body-md text-body-md text-on-surface">Vikram</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">25% (Exact)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-2">
+<button class="flex-1 h-12 rounded-full bg-surface-container-low text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-1 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+          Edit Split
+        </button>
+<button class="flex-1 h-12 rounded-full bg-secondary text-on-secondary font-label-lg text-label-lg font-bold flex items-center justify-center gap-1 shadow-md active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+          Share Bill
+        </button>
+</div>
+</div>
+</div>
+<!-- Client-Side Interactive Handling -->
+<script>
+    (function() {
+      // Filter Chips Selection Handling
+      const categoryChips = document.querySelectorAll('.category-chip');
+      const cards = document.querySelectorAll('.expense-card');
+
+      categoryChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          categoryChips.forEach(c => {
+            c.classList.remove('bg-primary-container', 'text-on-primary');
+            c.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+          });
+          chip.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+          chip.classList.add('bg-primary-container', 'text-on-primary');
+
+          const selectedCategory = chip.getAttribute('data-category');
+          cards.forEach(card => {
+            if (selectedCategory === 'all' || card.getAttribute('data-category') === selectedCategory) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Search Filtering
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const val = e.target.value.toLowerCase().trim();
+          cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(val) ? 'flex' : 'none';
+          });
+        });
+      }
+
+      // Offline Outbox Sync Micro-interaction
+      const syncBtn = document.getElementById('sync-btn');
+      const offlineBanner = document.getElementById('offline-banner');
+      if (syncBtn && offlineBanner) {
+        syncBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          syncBtn.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">progress_activity</span><span>Syncing...</span>';
+          setTimeout(() => {
+            offlineBanner.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+              offlineBanner.parentElement.style.display = 'none';
+            }, 300);
+          }, 900);
+        });
+      }
+
+      // Card Modal Trigger Affordance
+      const modal = document.getElementById('expense-modal');
+      const closeModalBtn = document.getElementById('close-modal-btn');
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          const title = card.querySelector('h4').innerText;
+          const total = card.querySelector('.font-headline-sm').innerText;
+          document.getElementById('modal-title').innerText = title;
+          document.getElementById('modal-total').innerText = total;
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        });
+      });
+
+      if (closeModalBtn && modal) {
+        closeModalBtn.addEventListener('click', () => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        });
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+          }
+        });
+      }
+    })();
+  </script>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(15,23,42,0.06)]" data-active-classes="text-secondary font-bold"><div class="flex items-center justify-around h-20 px-space-xs"><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1 px-2 text-on-surface-variant transition-colors hover:text-on-surface" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1 px-2 transition-colors text-secondary font-bold" data-path="expenses" href="#"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="font-label-sm text-label-sm mt-0.5">Expenses</span></a><div class="flex items-center justify-center relative -top-3.5"><a aria-label="Add Expense" class="flex items-center justify-center w-14 h-14 min-w-[48px] min-h-[48px] rounded-full bg-secondary text-on-secondary shadow-[0_8px_16px_rgba(75,65,225,0.32)] hover:bg-secondary-container transition-transform active:scale-95" data-path="add-expense" href="#"><span class="material-symbols-outlined text-[28px] font-bold">add</span></a></div><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1 px-2 text-on-surface-variant transition-colors hover:text-on-surface" data-path="settlements" href="#"><span class="material-symbols-outlined text-[24px]">sync_alt</span><span class="font-label-sm text-label-sm mt-0.5">Settlements</span></a></div></nav></body></html>

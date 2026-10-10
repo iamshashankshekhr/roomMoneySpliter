@@ -1,28 +1,32 @@
 import React from 'react';
-import { LogIn, LogOut, User, Sparkles, Building2 } from 'lucide-react';
+import { LogIn, LogOut, User, ChevronDown, Building2 } from 'lucide-react';
 
-export function AppHeader({ user, profile, onOpenAuth, onSignOut, roomName }) {
+export function AppHeader({ user, profile, onOpenAuth, onSignOut, roomName, onOpenRoomSwitcher }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-surface/90 backdrop-blur-xl border-b border-surface-container pt-safe">
       <div className="max-w-2xl mx-auto h-16 px-4 flex items-center justify-between">
-        {/* Logo & Room Title */}
+        {/* Logo & Interactive Room Switcher */}
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold font-headline text-base shadow-xs flex-shrink-0">
             RS
           </div>
-          <div className="flex flex-col min-w-0">
+
+          <button
+            type="button"
+            onClick={onOpenRoomSwitcher}
+            className="flex flex-col min-w-0 text-left group hover:opacity-85 transition-opacity"
+            title="Click to switch or create room"
+          >
             <div className="flex items-center gap-1.5">
-              <span className="font-bold text-sm text-on-surface truncate font-headline">
-                RoomSplit
+              <span className="font-bold text-sm text-on-surface truncate font-headline group-hover:text-secondary transition-colors">
+                {roomName || 'RoomSplit'}
               </span>
-              <span className="px-1.5 py-0.2 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold">
-                PWA
-              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-outline group-hover:text-secondary transition-colors" />
             </div>
-            <span className="text-[11px] text-on-surface-variant truncate">
-              {roomName || 'Clear Ledger & Split'}
+            <span className="text-[10px] text-on-surface-variant flex items-center gap-1">
+              <span>Switch / Create Room</span>
             </span>
-          </div>
+          </button>
         </div>
 
         {/* Auth / Profile Actions */}

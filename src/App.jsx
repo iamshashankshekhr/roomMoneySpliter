@@ -87,6 +87,7 @@ export default function App() {
         onOpenAuth={() => setIsAuthOpen(true)}
         onSignOut={signOut}
         roomName={currentRoom?.name}
+        onOpenRoomSwitcher={() => setIsRoomSwitcherOpen(true)}
       />
 
       {/* 2. Main Content Container */}
@@ -160,11 +161,13 @@ export default function App() {
           {activeTab === 'members' && (
             <RoomMemberList
               members={members}
+              userRooms={userRooms}
+              currentRoom={currentRoom}
               currentUserId={user?.id}
               onOpenInvite={handleOpenInvite}
               onOpenCreateRoom={() => setIsCreateRoomOpen(true)}
-              onOpenRoomSwitcher={() => setIsRoomSwitcherOpen(true)}
-              room={currentRoom}
+              onSwitchRoom={switchRoom}
+              onJoinRoom={joinRoomByToken}
             />
           )}
         </div>

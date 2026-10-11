@@ -135,9 +135,7 @@ export function useAuth() {
   async function signInWithGoogle() {
     const redirectUrl =
       import.meta.env.VITE_APP_URL ||
-      (window.location.origin.includes('localhost')
-        ? window.location.origin
-        : 'https://moneyspliter.imshashank.space');
+      window.location.origin;
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

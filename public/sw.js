@@ -1,4 +1,4 @@
-const CACHE_NAME = 'roomsplit-v1.1';
+const CACHE_NAME = 'roomsplit-v2.0';
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
@@ -27,6 +27,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((name) => {
           if (name !== CACHE_NAME) {
+            console.log('Clearing outdated service worker cache:', name);
             return caches.delete(name);
           }
         })
@@ -35,16 +36,29 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Listen for skip waiting messages from client
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 // Fetch: Strategy depending on request type
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // 1. Skip non-GET requests and Supabase auth/API (handled by IndexedDB outbox)
+  // 1. Skip non-GET requests and non-http(s)
   if (request.method !== 'GET') return;
+  if (!url.protocol.startsWith('http')) return;
+
+  // 2. Ignore local development completely
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') return;
+
+  // 3. Skip Supabase auth and database queries (handled by offline IndexedDB outbox)
   if (url.origin.includes('supabase.co')) return;
 
-  // 2. Navigation requests: Network-first, fallback to cached index.html
+  // 4. Navigation requests (HTML document): Network-first with offline cache fallback
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -56,45 +70,57 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(async () => {
-          const cached = await caches.match('/index.html');
-          return cached || new Response('Offline: RoomSplit is available offline via IndexedDB.', {
-            headers: { 'Content-Type': 'text/html' }
-          });
+          const cached = (await caches.match('/index.html')) || (await caches.match('/'));
+          if (cached) return cached;
+          return new Response(
+            '<!doctype html><html><body style="font-family:sans-serif;text-align:center;padding:2rem;"><h2>RoomSplit is offline</h2><p>Please check your connection and reload.</p></body></html>',
+            { headers: { 'Content-Type': 'text/html' } }
+          );
         })
     );
     return;
   }
 
-  // 3. Static assets & Google Fonts: Cache-first with network fallback
+  // 5. Static assets & Google Fonts
   if (
     url.origin === self.location.origin ||
     url.hostname.includes('fonts.googleapis.com') ||
     url.hostname.includes('fonts.gstatic.com')
   ) {
     event.respondWith(
-      caches.match(request).then((cachedResponse) => {
+      caches.match(request).then(async (cachedResponse) => {
         if (cachedResponse) {
-          // Revalidate in background for local assets
-          fetch(request).then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              caches.open(CACHE_NAME).then((cache) => cache.put(request, networkResponse));
-            }
-          }).catch(() => {});
+          // Revalidate in background for non-hashed root assets (like manifest or favicon)
+          if (!url.pathname.startsWith('/assets/')) {
+            fetch(request).then((networkResponse) => {
+              if (networkResponse && networkResponse.status === 200) {
+                caches.open(CACHE_NAME).then((cache) => cache.put(request, networkResponse));
+              }
+            }).catch(() => {});
+          }
           return cachedResponse;
         }
 
-        return fetch(request).then((response) => {
-          if (response && response.status === 200) {
-            const clone = response.clone();
+        // Cache miss: fetch from network safely
+        try {
+          const networkResponse = await fetch(request);
+          if (networkResponse && networkResponse.status === 200) {
+            const clone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
           }
-          return response;
-        });
+          return networkResponse;
+        } catch (fetchErr) {
+          // Return empty 408 instead of letting promise reject and crashing client
+          return new Response('', { status: 408, statusText: 'Resource unavailable offline' });
+        }
       })
     );
     return;
   }
 
-  // Default: Network fetch
-  event.respondWith(fetch(request));
+  // 6. Default: network with cache fallback
+  event.respondWith(
+    fetch(request).catch(() => caches.match(request))
+  );
 });
+

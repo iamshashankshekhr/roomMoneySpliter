@@ -1,29 +1,70 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 
+const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SESSION_START_KEY = 'rs_session_login_time';
+
 export function useAuth() {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Get initial active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    // 1. Get initial active session with 7-day expiration check
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
+        const loginTime = localStorage.getItem(SESSION_START_KEY);
+        const now = Date.now();
+
+        if (loginTime && (now - Number(loginTime) > SESSION_MAX_AGE_MS)) {
+          console.log('User login session expired after 7 days. Signing out...');
+          localStorage.removeItem(SESSION_START_KEY);
+          await supabase.auth.signOut();
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+
+        if (!loginTime) {
+          localStorage.setItem(SESSION_START_KEY, now.toString());
+        }
+
+        setUser(session.user);
         fetchProfile(session.user.id);
       } else {
+        localStorage.removeItem(SESSION_START_KEY);
+        setUser(null);
         setLoading(false);
       }
     });
 
     // 2. Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       const currentUser = session?.user ?? null;
-      setUser(currentUser);
       if (currentUser) {
+        const loginTime = localStorage.getItem(SESSION_START_KEY);
+        const now = Date.now();
+
+        if (loginTime && (now - Number(loginTime) > SESSION_MAX_AGE_MS)) {
+          console.log('User login session expired after 7 days. Signing out...');
+          localStorage.removeItem(SESSION_START_KEY);
+          await supabase.auth.signOut();
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+
+        if (event === 'SIGNED_IN' || !loginTime) {
+          localStorage.setItem(SESSION_START_KEY, now.toString());
+        }
+
+        setUser(currentUser);
         fetchProfile(currentUser.id);
       } else {
+        localStorage.removeItem(SESSION_START_KEY);
+        setUser(null);
         setProfile(null);
         setLoading(false);
       }
@@ -171,6 +212,7 @@ export function useAuth() {
 
   // 7. Sign out
   async function signOut() {
+    localStorage.removeItem(SESSION_START_KEY);
     await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
